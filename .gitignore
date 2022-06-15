@@ -1,0 +1,24 @@
+# Logs
+.idea
+logs
+*.log
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# vscode
+.vscode
+
+vendor
+.idea
+# Bin folder
+bin/*
+!bin/.gitkeep
+
+.env
+*.db
+*.sqlite
