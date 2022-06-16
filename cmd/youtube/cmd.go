@@ -6,6 +6,6 @@ import (
 
 var Cmd = &cli.Command{
 	Name:        "youtube",
-	Usage:       "Intect with YouTube",
+	Usage:       "Interact with YouTube",
 	Subcommands: []*cli.Command{CmdDownload},
 }
