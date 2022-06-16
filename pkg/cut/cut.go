@@ -5,6 +5,7 @@ import (
 	"path"
 
 	"github.com/mowshon/moviego"
+	"github.com/pterm/pterm"
 )
 
 func CutFile(options CutParams) (CroppedFile, error) {
@@ -25,9 +26,15 @@ func CutFile(options CutParams) (CroppedFile, error) {
 		path.Base(options.Source),
 	)
 
+	out.Name = path.Join(options.OutputDir, name)
+
+	pterm.Info.Printfln("Cropping: %s", path.Base(options.Source))
+	pterm.Info.Printfln("Start: %s", options.Start)
+	pterm.Info.Printfln("Finish: %s", options.Finish)
+
 	err = video.
 		SubClip(options.Start.Seconds(), options.Finish.Seconds()).
-		Output(path.Join(options.OutputDir, name)).
+		Output(out.Name).
 		Run()
 
 	return out, err
