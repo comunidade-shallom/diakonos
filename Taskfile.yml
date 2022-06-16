@@ -65,17 +65,25 @@ tasks:
       GOARM: "{{.GOARM}}"
       CGO_ENABLED: "{{.CGO_ENABLED}}"
 
-  release:linux:
-    desc: Release for Linux OS
+  production:linux:
+    desc: production build for Linux OS
     cmds:
       - task: build
         vars:
+          UPX: yes
           GOOS: linux
           APP_STAGE: prd
           BUILDFLAGS: -a -installsuffix cgo -ldflags '-s -w -extldflags "-static"'
 
-  release:
-    desc: Release for all platforms
-    deps: [ release:linux, release:arm64, release:arm ]
+  production:
+    desc: Production build for all platforms
+    deps: [ production:linux ]
     cmds:
       - cd {{.DIR_DIST}} && ls -lh | tr -s ' ' | cut -d ' ' -f 5,9-
+      - find -iname '{{.APP_BASE_NAME}}-*' -execdir upx {} \;
+      - cd {{.DIR_DIST}} && ls -lh | tr -s ' ' | cut -d ' ' -f 5,9-
+
+  release:snapshot:
+    desc: release snapshot mode
+    cmds:
+      - goreleaser release --snapshot --rm-dist
