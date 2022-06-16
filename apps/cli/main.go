@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/comunidade-shallom/diakonos/cmd"
+	"github.com/comunidade-shallom/diakonos/cmd/video"
 	"github.com/comunidade-shallom/diakonos/cmd/youtube"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/support"
@@ -28,7 +29,7 @@ func main() {
 				DefaultText: fmt.Sprintf("%s/diakonos.yml", support.GetBinDirPath()),
 			},
 		},
-		Commands: []*cli.Command{youtube.Cmd, cmd.CmdConfig},
+		Commands: []*cli.Command{youtube.Cmd, video.Cmd, cmd.CmdConfig},
 		Before: func(c *cli.Context) error {
 			pterm.Debug.Debugger = false
 

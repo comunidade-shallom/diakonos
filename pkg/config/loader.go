@@ -71,8 +71,7 @@ func Load(file string) (cfg AppConfig, err error) {
 func applyDefaults(cfg AppConfig) (AppConfig, error) {
 	pwd, _ := os.Getwd()
 
-	var err error
-
+	// download
 	if cfg.Download.OutputDir == "" {
 		cfg.Download.OutputDir = path.Join(pwd, "downloads")
 	}
@@ -89,8 +88,13 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 		cfg.Download.Quality = "hd1080"
 	}
 
-	if err != nil {
-		return cfg, err
+	// cut
+	if cfg.Cut.OutputDir == "" {
+		cfg.Cut.OutputDir = path.Join(pwd, "cuts")
+	}
+
+	if !path.IsAbs(cfg.Cut.OutputDir) {
+		cfg.Cut.OutputDir = path.Join(pwd, cfg.Cut.OutputDir)
 	}
 
 	return cfg, nil

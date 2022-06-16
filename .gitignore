@@ -20,9 +20,11 @@ vendor
 bin/*
 !bin/.gitkeep
 
-# Download folder
-downloads/*
-!downloads/.gitkeep
+# outputs folder
+outputs/downloads/*
+!outputs/downloads/.gitkeep
+outputs/cuts/*
+!outputs/cuts/.gitkeep
 
 .env
 *.db

@@ -5,13 +5,18 @@ import "context"
 type ctxKey struct{}
 
 type DownloadOptions struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:""`
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/downloads"`
 	Quality   string `fig:"quality" yaml:"quality" default:"hd1080"`
 	MimeType  string `fig:"mime_type" yaml:"mime_type" default:"mp4"`
 }
 
+type CutOptions struct {
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/cuts"`
+}
+
 type AppConfig struct {
 	Download DownloadOptions
+	Cut      CutOptions
 }
 
 var current AppConfig
