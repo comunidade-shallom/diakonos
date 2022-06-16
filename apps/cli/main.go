@@ -5,7 +5,12 @@ import (
 	"os"
 	"sort"
 
+	"github.com/comunidade-shallom/diakonos/cmd"
+	"github.com/comunidade-shallom/diakonos/cmd/youtube"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
+	"github.com/comunidade-shallom/diakonos/pkg/support"
+	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
+	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 )
 
@@ -15,6 +20,42 @@ func main() {
 		Description:          "Diakonos - Tools to speed media content development",
 		Usage:                "Diakonos CLI",
 		Copyright:            "https://github.com/comunidade-shallom",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "config",
+				Aliases:     []string{"c"},
+				Usage:       "load configuration from",
+				DefaultText: fmt.Sprintf("%s/diakonos.yml", support.GetBinDirPath()),
+			},
+		},
+		Commands: []*cli.Command{youtube.Cmd, cmd.CmdConfig},
+		Before: func(c *cli.Context) error {
+			pterm.Debug.Debugger = false
+
+			pterm.DefaultHeader.
+				WithMargin(5).
+				Println("Diakonos CLI")
+
+			appConfig, err := config.Load(c.String("config"))
+
+			if err != nil {
+				e, ok := err.(errors.BusinessError)
+				if ok && e.ErrorCode == config.ConfigFileWasCreated.ErrorCode {
+					pterm.Warning.Println(err.Error())
+				} else {
+					pterm.Fatal.PrintOnErrorf("Fail to load config (%s)", err)
+					return err
+				}
+			}
+
+			config.SetConfig(appConfig)
+
+			c.Context = appConfig.WithContext(c.Context)
+
+			pterm.Debug.Printfln("Config loaded")
+
+			return nil
+		},
 	}
 
 	cli.VersionPrinter = func(c *cli.Context) {
@@ -29,6 +70,7 @@ func main() {
 	err := app.Run(os.Args)
 
 	if err != nil {
-		panic(err)
+		pterm.Error.Println(err.Error())
+		os.Exit(1)
 	}
 }
