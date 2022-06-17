@@ -21,11 +21,30 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
+      - darwin
+
+  - id: win_x64
+    dir: ./apps/cli/
+    ldflags:
+      - -s
+      - -w
+      - -extldflags=-static
+    flags:
+      - -a
+      - -installsuffix=cgo
+    env:
+      - CGO_ENABLED=0
+    goarch:
+      - amd64
+    goos:
+      - windows
 
 archives:
   - format: binary
     replacements:
+      darwin: Darwin
       linux: Linux
+      windows: Windows
       386: i386
       amd64: x86_64
 
