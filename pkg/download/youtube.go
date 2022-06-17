@@ -9,6 +9,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
 	"github.com/gosimple/slug"
 	youtube "github.com/kkdai/youtube/v2"
 	ytdl "github.com/kkdai/youtube/v2/downloader"
@@ -38,7 +39,7 @@ func YouTube(ctx context.Context, options DownloadParams) (DownloadedFile, *yout
 	pterm.Info.Printfln("Downloading: %s", video.Title)
 	pterm.Info.Printfln("Quality: %s", options.Quality)
 	pterm.Info.Printfln("MimeType: %s", options.MimeType)
-	pterm.Info.Printfln("Target: %s", out.Name)
+	pterm.Info.Printfln("Target: %s", fileutils.GetRelative(out.Name))
 
 	err = client.DownloadComposite(ctx, name, video, options.Quality, options.MimeType)
 
