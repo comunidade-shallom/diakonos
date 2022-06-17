@@ -14,9 +14,14 @@ type CutOptions struct {
 	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/cuts"`
 }
 
+type AudioOptions struct {
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/audios"`
+}
+
 type AppConfig struct {
 	Download DownloadOptions
 	Cut      CutOptions
+	Audio    AudioOptions
 }
 
 var current AppConfig

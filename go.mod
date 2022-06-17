@@ -10,6 +10,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mowshon/moviego v1.0.0
 	github.com/pterm/pterm v0.12.41
+	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/urfave/cli/v2 v2.8.1
 	golang.org/x/net v0.0.0-20220524220425-1d687d428aca
 	gopkg.in/yaml.v3 v3.0.1
@@ -36,7 +37,6 @@ require (
 	github.com/tidwall/gjson v1.14.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
-	github.com/u2takey/ffmpeg-go v0.4.1 // indirect
 	github.com/u2takey/go-utils v0.3.1 // indirect
 	github.com/vbauerster/mpb/v5 v5.4.0 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect

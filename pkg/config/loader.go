@@ -73,7 +73,7 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 
 	// download
 	if cfg.Download.OutputDir == "" {
-		cfg.Download.OutputDir = path.Join(pwd, "downloads")
+		cfg.Download.OutputDir = path.Join(pwd, "outputs/downloads")
 	}
 
 	if !path.IsAbs(cfg.Download.OutputDir) {
@@ -90,11 +90,20 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 
 	// cut
 	if cfg.Cut.OutputDir == "" {
-		cfg.Cut.OutputDir = path.Join(pwd, "cuts")
+		cfg.Cut.OutputDir = path.Join(pwd, "outputs/cuts")
 	}
 
 	if !path.IsAbs(cfg.Cut.OutputDir) {
 		cfg.Cut.OutputDir = path.Join(pwd, cfg.Cut.OutputDir)
+	}
+
+	// audios
+	if cfg.Audio.OutputDir == "" {
+		cfg.Audio.OutputDir = path.Join(pwd, "outputs/audios")
+	}
+
+	if !path.IsAbs(cfg.Audio.OutputDir) {
+		cfg.Audio.OutputDir = path.Join(pwd, cfg.Audio.OutputDir)
 	}
 
 	return cfg, nil

@@ -22,10 +22,8 @@ bin/*
 !bin/.gitkeep
 
 # outputs folder
-outputs/downloads/*
-!outputs/downloads/.gitkeep
-outputs/cuts/*
-!outputs/cuts/.gitkeep
+outputs/**
+!outputs/*/.gitkeep
 
 .env
 *.db
