@@ -4,11 +4,17 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
+	"github.com/comunidade-shallom/diakonos/pkg/extract"
+	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 )
 
 var cutFlags = []cli.Flag{
+	&cli.BoolFlag{
+		Name:  "extract-audio",
+		Usage: "Extract file audio",
+	},
 	&cli.DurationFlag{
 		Name:     "start",
 		Usage:    "begin of video",
@@ -42,7 +48,9 @@ var CmdCut = &cli.Command{
 			return err
 		}
 
-		file, _, err := download.YouTube(c.Context, params)
+		videoFile, _, err := download.YouTube(c.Context, params)
+
+		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(videoFile.Name))
 
 		if err != nil {
 			return err
@@ -53,15 +61,30 @@ var CmdCut = &cli.Command{
 		start := c.Duration("start")
 		finish := c.Duration("finish")
 
-		_, err = cut.CutFile(cut.CutParams{
+		croppedFile, err := cut.CutFile(cut.CutParams{
 			OutputDir: cfg.Cut.OutputDir,
-			Source:    file.Name,
+			Source:    videoFile.Name,
 			Start:     start,
 			Finish:    finish,
 		})
 
 		if err != nil {
 			return err
+		}
+
+		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(croppedFile.Name))
+
+		if c.Bool("extract-audio") {
+			audioFile, err := extract.Audio(extract.ExtractParams{
+				Source:    croppedFile.Name,
+				OutputDir: cfg.Audio.OutputDir,
+			})
+
+			if err != nil {
+				return err
+			}
+
+			pterm.Success.Printfln("Done: %s", fileutils.GetRelative(audioFile.Name))
 		}
 
 		pterm.Success.Printfln("Done")
