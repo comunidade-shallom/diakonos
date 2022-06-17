@@ -4,9 +4,7 @@ Tools to speed media content development
 
 ## Requeriments
 
-- [Go ~> 1.18](https://go.dev/dl/)
-- [Task v3](https://taskfile.dev/)
-- [ffmpeg v5](https://ffmpeg.org/)
+- [ffmpeg](https://ffmpeg.org/download.html)
 
 ## Development
 
@@ -23,3 +21,9 @@ task run:cli -- youtube download 'https://www.youtube.com/watch?v=8yAbX8W3Caw'
 task build
 ./bin/diakonos-cli-linux-amd64 config
 ```
+
+### Requeriments
+
+- [Go ~> 1.18](https://go.dev/dl/)
+- [Task v3](https://taskfile.dev/)
+- [ffmpeg v5](https://ffmpeg.org/)
