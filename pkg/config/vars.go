@@ -9,7 +9,7 @@ var (
 	version   string
 	buildDate string
 	commit    string
-	appStage  string
+	notes     string
 )
 
 func Version() string {
@@ -17,7 +17,7 @@ func Version() string {
 }
 
 func VersionVerbose() string {
-	return fmt.Sprintf("Version %s\nRevision %s\nBuild at %s", Version(), Commit(), BuildDate())
+	return fmt.Sprintf("Version %s\nRevision %s\nBuild at %s\n\n%s", Version(), Commit(), BuildDate(), notes)
 }
 
 func BuildDate() string {

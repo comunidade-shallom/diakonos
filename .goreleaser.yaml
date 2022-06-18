@@ -14,6 +14,10 @@ builds:
       - -s
       - -w
       - -extldflags=-static
+      - -X github.com/comunidade-shallom/diakonos/pkg/config.commit={{.Branch}}@{{.ShortCommit}}
+      - -X github.com/comunidade-shallom/diakonos/pkg/config.version={{.Summary}}
+      - -X github.com/comunidade-shallom/diakonos/pkg/config.buildDate={{.Date}}
+      - -X github.com/comunidade-shallom/diakonos/pkg/config.notes={{.ReleaseURL}}
     flags:
       - -a
       - -installsuffix=cgo

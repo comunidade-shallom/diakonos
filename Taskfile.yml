@@ -52,10 +52,9 @@ tasks:
       - "{{.EXTRA_ENVS}} go build {{.BUILDFLAGS}} {{.LDFLAGS}} -o {{.DIR_DIST}}/{{.BIN_NAME}} ./apps/{{.APP}}"
       - chmod +x {{.DIR_DIST}}/{{.BIN_NAME}}
     vars:
-      LDFLAGS: -ldflags "-X {{.PKG_NAME}}/pkg/config.commit={{.GIT_HASH}} -X {{.PKG_NAME}}/pkg/config.version={{.APP_VERSION}} -X {{.PKG_NAME}}/pkg/config.buildDate={{.BUILD_DATE}} -X {{.PKG_NAME}}/pkg/config.appStage={{.APP_STAGE}}"
+      LDFLAGS: -ldflags "-X {{.PKG_NAME}}/pkg/config.commit={{.GIT_HASH}} -X {{.PKG_NAME}}/pkg/config.version={{.APP_VERSION}} -X {{.PKG_NAME}}/pkg/config.buildDate={{.BUILD_DATE}}"
       APP: '{{default "cli" .APP}}'
       GOOS: '{{default "linux" .GOOS}}'
-      APP_STAGE: '{{default "dev" .APP_STAGE}}'
       GOARCH: '{{default "amd64" .GOARCH}}'
       CGO_ENABLED: '{{default 0 .CGO_ENABLED}}'
       BIN_NAME: '{{.APP_BASE_NAME}}-{{.APP}}-{{.GOOS}}-{{.GOARCH}}'
@@ -72,7 +71,6 @@ tasks:
         vars:
           UPX: yes
           GOOS: linux
-          APP_STAGE: prd
           BUILDFLAGS: -a -installsuffix cgo -ldflags '-s -w -extldflags "-static"'
 
   production:

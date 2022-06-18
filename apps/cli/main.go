@@ -20,6 +20,7 @@ func main() {
 		EnableBashCompletion: true,
 		Description:          "Diakonos - Tools to speed media content development",
 		Usage:                "Diakonos CLI",
+		Version:              config.Version(),
 		Copyright:            "https://github.com/comunidade-shallom",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
