@@ -26,13 +26,17 @@ func main() {
 			&cli.StringFlag{
 				Name:        "config",
 				Aliases:     []string{"c"},
-				Usage:       "load configuration from",
+				Usage:       "Load configuration from",
 				DefaultText: fmt.Sprintf("%s/diakonos.yml", support.GetBinDirPath()),
+			},
+			&cli.BoolFlag{
+				Name:  "debug",
+				Usage: "Enable debug mode",
 			},
 		},
 		Commands: []*cli.Command{youtube.Cmd, video.Cmd, cmd.CmdConfig},
 		Before: func(c *cli.Context) error {
-			pterm.Debug.Debugger = false
+			pterm.Debug.Debugger = !c.Bool("debug")
 
 			pterm.DefaultHeader.
 				WithMargin(5).
