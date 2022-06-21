@@ -8,7 +8,6 @@ require (
 	github.com/kkdai/youtube/v2 v2.7.15
 	github.com/kkyr/fig v0.3.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/mowshon/moviego v1.0.0
 	github.com/pterm/pterm v0.12.42
 	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/urfave/cli/v2 v2.10.2
@@ -37,9 +36,6 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/tidwall/gjson v1.14.0 // indirect
-	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/u2takey/go-utils v0.3.1 // indirect
 	github.com/vbauerster/mpb/v5 v5.4.0 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
