@@ -18,10 +18,15 @@ type AudioOptions struct {
 	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/audios"`
 }
 
+type MergeOptions struct {
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/merges"`
+}
+
 type AppConfig struct {
 	Download DownloadOptions
 	Cut      CutOptions
 	Audio    AudioOptions
+	Merge    MergeOptions
 }
 
 var current AppConfig

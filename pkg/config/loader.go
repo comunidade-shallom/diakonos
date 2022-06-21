@@ -106,6 +106,15 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 		cfg.Audio.OutputDir = path.Join(pwd, cfg.Audio.OutputDir)
 	}
 
+	// merged
+	if cfg.Merge.OutputDir == "" {
+		cfg.Merge.OutputDir = path.Join(pwd, "outputs/merges")
+	}
+
+	if !path.IsAbs(cfg.Merge.OutputDir) {
+		cfg.Merge.OutputDir = path.Join(pwd, cfg.Merge.OutputDir)
+	}
+
 	return cfg, nil
 }
 
