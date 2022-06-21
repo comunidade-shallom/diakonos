@@ -6,6 +6,7 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 	"github.com/comunidade-shallom/diakonos/pkg/extract"
 	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 )
@@ -50,11 +51,15 @@ var CmdCut = &cli.Command{
 
 		videoFile, _, err := download.YouTube(c.Context, params)
 
-		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(videoFile.Name))
-
 		if err != nil {
-			return err
+			if e, ok := err.(errors.BusinessError); ok {
+				pterm.Warning.Println(e.Error())
+			} else {
+				return err
+			}
 		}
+
+		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(videoFile.Name))
 
 		cfg := config.Ctx(c.Context)
 

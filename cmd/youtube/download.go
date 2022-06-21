@@ -29,6 +29,10 @@ var CmdDownload = &cli.Command{
 
 		_, _, err = download.YouTube(c.Context, params)
 
+		if err != nil {
+			return err
+		}
+
 		pterm.Success.Println("Done")
 
 		return err
