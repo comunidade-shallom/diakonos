@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/comunidade-shallom/diakonos/cmd"
+	"github.com/comunidade-shallom/diakonos/cmd/process"
 	"github.com/comunidade-shallom/diakonos/cmd/video"
 	"github.com/comunidade-shallom/diakonos/cmd/youtube"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
@@ -34,7 +35,7 @@ func main() {
 				Usage: "Enable debug mode",
 			},
 		},
-		Commands: []*cli.Command{youtube.Cmd, video.Cmd, cmd.CmdConfig},
+		Commands: []*cli.Command{youtube.Cmd, video.Cmd, process.Cmd, cmd.CmdConfig},
 		Before: func(c *cli.Context) error {
 			pterm.Debug.Debugger = !c.Bool("debug")
 
