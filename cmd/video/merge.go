@@ -5,7 +5,7 @@ import (
 	"path"
 
 	"github.com/comunidade-shallom/diakonos/pkg/config"
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/merge"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
@@ -42,7 +42,7 @@ var CmdMerge = &cli.Command{
 		})
 
 		if err == nil {
-			pterm.Success.Printfln("Done: %s", fileutils.GetRelative(out.Name))
+			pterm.Success.Printfln("Done: %s", files.GetRelative(out.Name))
 		}
 
 		return err

@@ -5,7 +5,7 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 	"github.com/comunidade-shallom/diakonos/pkg/extract"
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
@@ -77,7 +77,7 @@ var CmdCut = &cli.Command{
 			return err
 		}
 
-		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(croppedFile.Name))
+		pterm.Success.Printfln("Done: %s", files.GetRelative(croppedFile.Name))
 
 		if c.Bool("extract-audio") {
 			audioFile, err := extract.Audio(extract.ExtractParams{
@@ -89,7 +89,7 @@ var CmdCut = &cli.Command{
 				return err
 			}
 
-			pterm.Success.Printfln("Done: %s", fileutils.GetRelative(audioFile.Name))
+			pterm.Success.Printfln("Done: %s", files.GetRelative(audioFile.Name))
 		}
 
 		pterm.Success.Printfln("Done")

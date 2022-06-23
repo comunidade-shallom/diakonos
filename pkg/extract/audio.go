@@ -1,7 +1,7 @@
 package extract
 
 import (
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
@@ -14,14 +14,14 @@ func Audio(options ExtractParams) (ExtractedFile, error) {
 		ExtractParams: options,
 	}
 
-	out.Name = fileutils.ChangeLocation(options.Source, options.OutputDir, "mp3")
+	out.Name = files.ChangeLocation(options.Source, options.OutputDir, "mp3")
 
-	if fileutils.FileExists(out.Name) {
-		return out, ErrExist.Msgf(fileutils.GetRelative(out.Name))
+	if files.FileExists(out.Name) {
+		return out, ErrExist.Msgf(files.GetRelative(out.Name))
 	}
 
-	pterm.Info.Printfln("Extraction audio from: %s", fileutils.GetRelative(options.Source))
-	pterm.Info.Printfln("Generating: %s", fileutils.GetRelative(out.Name))
+	pterm.Info.Printfln("Extraction audio from: %s", files.GetRelative(options.Source))
+	pterm.Info.Printfln("Generating: %s", files.GetRelative(out.Name))
 
 	err := ffmpeg.Input(options.Source).
 		Audio().

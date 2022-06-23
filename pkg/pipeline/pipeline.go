@@ -7,7 +7,7 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 	"github.com/comunidade-shallom/diakonos/pkg/extract"
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 )
@@ -39,7 +39,7 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]Ou
 			return p.outputs, err
 		}
 
-		pterm.Success.Printfln("Generated: %s", fileutils.GetRelative(out.Filename))
+		pterm.Success.Printfln("Generated: %s", files.GetRelative(out.Filename))
 
 		if act.ID == "" {
 			pterm.Warning.Printf("Missing action id (%s)", act.Type)

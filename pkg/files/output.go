@@ -2,8 +2,6 @@ package files
 
 import (
 	"path"
-
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
 )
 
 type Output struct {
@@ -11,11 +9,11 @@ type Output struct {
 }
 
 func (o Output) Exists() bool {
-	return fileutils.FileExists(o.Filename)
+	return FileExists(o.Filename)
 }
 
 func (o Output) NameRelative() string {
-	return fileutils.GetRelative(o.Filename)
+	return GetRelative(o.Filename)
 }
 
 func (o Output) Name() string {

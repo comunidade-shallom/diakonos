@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
@@ -20,7 +20,7 @@ func MergeFiles(options MergeParams) (MergedFile, error) {
 	out.Name = options.filename()
 
 	if out.fileExists() {
-		return out, ErrExist.Msgf(fileutils.GetRelative(out.Name))
+		return out, ErrExist.Msgf(files.GetRelative(out.Name))
 	}
 
 	tmp, err := options.tempFile()

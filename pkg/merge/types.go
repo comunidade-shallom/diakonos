@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 )
 
 type MergeParams struct {
@@ -56,5 +56,5 @@ func (p MergeParams) tempFile() (*os.File, error) {
 }
 
 func (m MergedFile) fileExists() bool {
-	return fileutils.FileExists(m.Name)
+	return files.FileExists(m.Name)
 }

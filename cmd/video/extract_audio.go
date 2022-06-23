@@ -6,7 +6,7 @@ import (
 
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/extract"
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 )
@@ -37,7 +37,7 @@ var CmdExtractAudio = &cli.Command{
 			OutputDir: cfg.Audio.OutputDir,
 		})
 
-		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(file.Name))
+		pterm.Success.Printfln("Done: %s", files.GetRelative(file.Name))
 
 		return err
 	},

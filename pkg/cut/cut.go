@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
@@ -26,8 +26,8 @@ func CutFile(options CutParams) (CroppedFile, error) {
 
 	out.Name = path.Join(options.OutputDir, name)
 
-	if fileutils.FileExists(out.Name) {
-		return out, ErrExist.Msgf(fileutils.GetRelative(out.Name))
+	if files.FileExists(out.Name) {
+		return out, ErrExist.Msgf(files.GetRelative(out.Name))
 	}
 
 	pterm.Info.Printfln("Cropping: %s", path.Base(options.Source))
