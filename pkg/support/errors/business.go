@@ -24,14 +24,14 @@ func (e BusinessError) Msgf(params ...interface{}) BusinessError {
 	return e
 }
 
-// NotFound error
+// NotFound error.
 func NotFound(resource, code string) NotFoundError {
 	return NotFoundError{
 		BusinessError: Business("Not found: "+resource, code),
 	}
 }
 
-// Error string
+// Error string.
 func (e BusinessError) Error() string {
 	var b strings.Builder
 
@@ -45,7 +45,7 @@ func (e BusinessError) Error() string {
 	return b.String()
 }
 
-// ToJSON error
+// ToJSON error.
 func (e BusinessError) ToJSON() []byte {
 	res, _ := json.Marshal(e)
 	return res

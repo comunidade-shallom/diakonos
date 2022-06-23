@@ -24,7 +24,6 @@ func MergeFiles(options MergeParams) (MergedFile, error) {
 	}
 
 	tmp, err := options.tempFile()
-
 	if err != nil {
 		return out, err
 	}

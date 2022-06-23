@@ -9,7 +9,7 @@ type ValidationError struct {
 	Details []error `json:"details,omitempty"`
 }
 
-// Validation error build
+// Validation error build.
 func Validation(message, code string, details ...error) ValidationError {
 	return ValidationError{
 		BusinessError: Business(message, code),

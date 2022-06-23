@@ -18,9 +18,7 @@ type ActionDefinition struct {
 	Source ActionSource `yml:"source"`
 }
 
-var (
-	ErrMissingAction = errors.Business("missing action value", "DP:001")
-)
+var ErrMissingAction = errors.Business("missing action value", "DP:001")
 
 func (e *ActionSource) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	// try to get raw value

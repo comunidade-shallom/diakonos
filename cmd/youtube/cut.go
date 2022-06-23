@@ -41,15 +41,12 @@ var CmdCut = &cli.Command{
 	Usage: "Crop YouTube video",
 	Flags: cutFlags,
 	Action: func(c *cli.Context) error {
-
 		params, err := getDownloadParams(c)
-
 		if err != nil {
 			return err
 		}
 
 		videoFile, _, err := download.YouTube(c.Context, params)
-
 		if err != nil {
 			if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 				pterm.Warning.Println(e.Error())
@@ -70,13 +67,11 @@ var CmdCut = &cli.Command{
 			Start:  start,
 			Finish: finish,
 		})
-
 		if err != nil {
 			return err
 		}
 
 		croppedFile, err := cut.CutFile(cutParams)
-
 		if err != nil {
 			return err
 		}
@@ -87,13 +82,11 @@ var CmdCut = &cli.Command{
 			extractParams, err := cfg.Audio.Apply(audios.Params{
 				Source: croppedFile.Filename,
 			})
-
 			if err != nil {
 				return err
 			}
 
 			audioFile, err := audios.Extract(extractParams)
-
 			if err != nil {
 				return err
 			}

@@ -22,7 +22,6 @@ var CmdDownload = &cli.Command{
 	},
 	Action: func(c *cli.Context) error {
 		params, err := getDownloadParams(c)
-
 		if err != nil {
 			return err
 		}

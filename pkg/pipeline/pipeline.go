@@ -34,7 +34,6 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]Ou
 
 	for _, act := range p.Actions {
 		out, err := p.runAction(act)
-
 		if err != nil {
 			return p.outputs, err
 		}
@@ -90,13 +89,11 @@ func (p Pipeline) runAction(act ActionDefinition) (Output, error) {
 
 func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 	source, err := p.getSource(act)
-
 	if err != nil {
 		return Output{}, err
 	}
 
 	params, err := p.cfg.Download.FromRaw(act.Params)
-
 	if err != nil {
 		return Output{}, err
 	}
@@ -104,7 +101,6 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 	params.Source = source.Value
 
 	f, _, err := download.YouTube(p.ctx, params)
-
 	if err != nil {
 		if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 			pterm.Warning.Println(e.Error())
@@ -120,13 +116,11 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 
 func (p Pipeline) runCutVideo(act ActionDefinition) (Output, error) {
 	source, err := p.getSource(act)
-
 	if err != nil {
 		return Output{}, err
 	}
 
 	params, err := p.cfg.Cut.Params(act.Params)
-
 	if err != nil {
 		return Output{}, err
 	}
@@ -142,13 +136,11 @@ func (p Pipeline) runCutVideo(act ActionDefinition) (Output, error) {
 
 func (p Pipeline) runExtractAudio(act ActionDefinition) (Output, error) {
 	source, err := p.getSource(act)
-
 	if err != nil {
 		return Output{}, err
 	}
 
 	params, err := p.cfg.Audio.FromRaw(act.Params)
-
 	if err != nil {
 		return Output{}, err
 	}

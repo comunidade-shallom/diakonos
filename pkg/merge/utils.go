@@ -14,7 +14,7 @@ func buildHash(sources []string) string {
 		buffer.WriteString("#")
 	}
 
-	sum := sha256.Sum256([]byte(buffer.String()))
+	sum := sha256.Sum256(buffer.Bytes())
 
 	return base64.RawURLEncoding.EncodeToString(sum[:])
 }

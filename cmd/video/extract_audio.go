@@ -34,7 +34,6 @@ var CmdExtractAudio = &cli.Command{
 		params, err := cfg.Audio.Apply(audios.Params{
 			Source: source,
 		})
-
 		if err != nil {
 			return err
 		}

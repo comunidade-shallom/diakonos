@@ -14,9 +14,7 @@ type Params struct {
 	OutputDir string
 }
 
-var (
-	ErrExist = errors.Business("file already exist (%s)", "DE:001")
-)
+var ErrExist = errors.Business("file already exist (%s)", "DE:001")
 
 func (c Config) FromRaw(raw map[string]string) (Params, error) {
 	return c.Apply(Params{

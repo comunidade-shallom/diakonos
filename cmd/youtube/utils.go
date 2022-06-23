@@ -7,9 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var (
-	ErrorMissingSourceArgument = errors.Business("Missing 'source' arg (eg.: https://www.youtube.com/watch?v=8yAbX8W3Caw)", "DCD:001")
-)
+var ErrorMissingSourceArgument = errors.Business("Missing 'source' arg (eg.: https://www.youtube.com/watch?v=8yAbX8W3Caw)", "DCD:001")
 
 func getDownloadParams(c *cli.Context) (download.Params, error) {
 	conf := config.Ctx(c.Context)

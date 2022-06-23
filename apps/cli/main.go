@@ -44,7 +44,6 @@ func main() {
 				Println("Diakonos CLI")
 
 			appConfig, err := config.Load(c.String("config"))
-
 			if err != nil {
 				e, ok := err.(errors.BusinessError)
 				if ok && e.ErrorCode == config.ConfigFileWasCreated.ErrorCode {
@@ -54,8 +53,6 @@ func main() {
 					return err
 				}
 			}
-
-			config.SetConfig(appConfig)
 
 			c.Context = appConfig.WithContext(c.Context)
 
@@ -75,7 +72,6 @@ func main() {
 	sort.Sort(cli.CommandsByName(app.Commands))
 
 	err := app.Run(os.Args)
-
 	if err != nil {
 		pterm.Error.Println(err.Error())
 		os.Exit(1)

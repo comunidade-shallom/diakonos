@@ -36,7 +36,6 @@ func (p MergeParams) filename() string {
 
 func (p MergeParams) tempFile() (*os.File, error) {
 	file, err := ioutil.TempFile(p.OutputDir, "videos-to-merge.*.txt")
-
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +49,7 @@ func (p MergeParams) tempFile() (*os.File, error) {
 		list.WriteString("' \n")
 	}
 
-	file.WriteString(list.String())
+	file.WriteString(list.String()) //nolint:errcheck
 
 	return file, err
 }

@@ -24,7 +24,6 @@ var CmdMerge = &cli.Command{
 	},
 	Action: func(c *cli.Context) error {
 		sources, err := buildSources(c.Args().Slice())
-
 		if err != nil {
 			return err
 		}

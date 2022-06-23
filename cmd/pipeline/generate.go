@@ -12,15 +12,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var (
-	ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DP:001")
-)
+var ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DP:001")
 
 var Cmd = &cli.Command{
 	Name:  "pipeline",
 	Usage: "Process a .yml file and dynamic generate multimedia assets",
 	Action: func(c *cli.Context) error {
-
 		source := c.Args().First()
 
 		if source == "" {
@@ -33,7 +30,6 @@ var Cmd = &cli.Command{
 		}
 
 		content, err := ioutil.ReadFile(source)
-
 		if err != nil {
 			return err
 		}

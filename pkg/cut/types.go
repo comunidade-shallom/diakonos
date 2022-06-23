@@ -25,7 +25,6 @@ func (c Config) Params(raw map[string]string) (Params, error) {
 	}
 
 	start, err := time.ParseDuration(raw["start"])
-
 	if err != nil {
 		return p, err
 	}
@@ -33,7 +32,6 @@ func (c Config) Params(raw map[string]string) (Params, error) {
 	p.Start = start
 
 	finish, err := time.ParseDuration(raw["finish"])
-
 	if err != nil {
 		return p, err
 	}
@@ -65,5 +63,4 @@ func (p Params) Filename() string {
 	)
 
 	return path.Join(p.OutputDir, name)
-
 }

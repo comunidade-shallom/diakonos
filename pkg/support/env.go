@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// GetEnv from OS
+// GetEnv from OS.
 func GetEnv(key, def string) string {
 	val := os.Getenv(key)
 
@@ -17,7 +17,7 @@ func GetEnv(key, def string) string {
 	return def
 }
 
-// GetEnvInt from OS
+// GetEnvInt from OS.
 func GetEnvInt(key string, def int) (int, error) {
 	val := os.Getenv(key)
 
@@ -28,7 +28,7 @@ func GetEnvInt(key string, def int) (int, error) {
 	return def, nil
 }
 
-// GetEnvDur from OS
+// GetEnvDur from OS.
 func GetEnvDur(key string, def time.Duration) (time.Duration, error) {
 	val := os.Getenv(key)
 

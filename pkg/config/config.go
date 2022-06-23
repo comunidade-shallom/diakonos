@@ -25,8 +25,6 @@ type AppConfig struct {
 	Merge    MergeOptions
 }
 
-var current AppConfig
-
 func Ctx(ctx context.Context) AppConfig {
 	cf, _ := ctx.Value(ctxKey{}).(AppConfig)
 

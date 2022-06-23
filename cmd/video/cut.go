@@ -7,9 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var (
-	ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DV:001")
-)
+var ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DV:001")
 
 var CmdCut = &cli.Command{
 	Name:  "cut",
@@ -43,7 +41,6 @@ var CmdCut = &cli.Command{
 			Start:  start,
 			Finish: finish,
 		})
-
 		if err != nil {
 			return err
 		}

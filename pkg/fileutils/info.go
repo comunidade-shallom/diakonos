@@ -39,7 +39,6 @@ type VideoInfo struct {
 
 func GetVideoInfo(source string) (info VideoInfo, err error) {
 	j, err := ffmpeg.ProbeWithTimeout(source, time.Second*5, ffmpeg.KwArgs{})
-
 	if err != nil {
 		return info, err
 	}
@@ -51,7 +50,6 @@ func GetVideoInfo(source string) (info VideoInfo, err error) {
 
 func GetAudioStreams(source string) (list []VideoStream, err error) {
 	info, err := GetVideoInfo(source)
-
 	if err != nil {
 		return list, err
 	}

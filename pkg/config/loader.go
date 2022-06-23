@@ -20,10 +20,6 @@ var (
 	ConfigFileWasCreated = errors.Business("a new config file was created (%s)", "DCONF:003")
 )
 
-func SetConfig(cfg AppConfig) {
-	current = cfg
-}
-
 func Load(file string) (cfg AppConfig, err error) {
 	if file != "" {
 		err = fig.Load(&cfg,
@@ -39,7 +35,6 @@ func Load(file string) (cfg AppConfig, err error) {
 	}
 
 	home, err := homedir.Dir()
-
 	if err != nil {
 		return cfg, ErrFailToLoadConfig.WithErr(err)
 	}
@@ -132,7 +127,6 @@ func ensureConfig() (cfg AppConfig, err error) {
 	}
 
 	buf, err := yaml.Marshal(cfg)
-
 	if err != nil {
 		return cfg, ErrFailEnsureConfig.WithErr(err)
 	}

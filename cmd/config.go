@@ -9,9 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var (
-	ErrFailToMarshalConfig = errors.System(nil, "Fail to marshal config", "DCMD:001")
-)
+var ErrFailToMarshalConfig = errors.System(nil, "Fail to marshal config", "DCMD:001")
 
 var CmdConfig = &cli.Command{
 	Name:  "config",
@@ -20,7 +18,6 @@ var CmdConfig = &cli.Command{
 		cfg := config.Ctx(ctx.Context)
 
 		d, err := yaml.Marshal(&cfg)
-
 		if err != nil {
 			return ErrFailToMarshalConfig.WithErr(err)
 		}

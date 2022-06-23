@@ -1,9 +1,11 @@
 package pipeline
 
-type Action string
-type Source struct {
-	Value string
-}
+type (
+	Action string
+	Source struct {
+		Value string
+	}
+)
 
 type Output struct {
 	Filename string

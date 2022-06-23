@@ -19,7 +19,6 @@ func YouTube(ctx context.Context, params Params) (Output, *youtube.Video, error)
 	client := youtubeClient(params.OutputDir)
 
 	video, err := client.GetVideo(params.Source)
-
 	if err != nil {
 		return out, video, err
 	}
