@@ -95,13 +95,13 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 		return Output{}, err
 	}
 
-	params, err := download.Params(act.Params, p.cfg.Download)
+	params, err := p.cfg.Download.FromRaw(act.Params)
 
 	if err != nil {
 		return Output{}, err
 	}
 
-	params.From = source.Value
+	params.Source = source.Value
 
 	f, _, err := download.YouTube(p.ctx, params)
 
@@ -114,7 +114,7 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 	}
 
 	return Output{
-		Filename: f.Name,
+		Filename: f.Filename,
 	}, nil
 }
 

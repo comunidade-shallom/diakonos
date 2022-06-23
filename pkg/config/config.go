@@ -1,14 +1,12 @@
 package config
 
-import "context"
+import (
+	"context"
+
+	"github.com/comunidade-shallom/diakonos/pkg/download"
+)
 
 type ctxKey struct{}
-
-type DownloadOptions struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/downloads"`
-	Quality   string `fig:"quality" yaml:"quality" default:"hd1080"`
-	MimeType  string `fig:"mime_type" yaml:"mime_type" default:"mp4"`
-}
 
 type CutOptions struct {
 	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/cuts"`
@@ -23,7 +21,7 @@ type MergeOptions struct {
 }
 
 type AppConfig struct {
-	Download DownloadOptions
+	Download download.Config
 	Cut      CutOptions
 	Audio    AudioOptions
 	Merge    MergeOptions

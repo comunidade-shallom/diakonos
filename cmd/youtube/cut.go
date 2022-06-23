@@ -59,7 +59,7 @@ var CmdCut = &cli.Command{
 			}
 		}
 
-		pterm.Success.Printfln("Done: %s", fileutils.GetRelative(videoFile.Name))
+		pterm.Success.Printfln("Done: %s", videoFile.NameRelative())
 
 		cfg := config.Ctx(c.Context)
 
@@ -68,7 +68,7 @@ var CmdCut = &cli.Command{
 
 		croppedFile, err := cut.CutFile(cut.CutParams{
 			OutputDir: cfg.Cut.OutputDir,
-			Source:    videoFile.Name,
+			Source:    videoFile.Filename,
 			Start:     start,
 			Finish:    finish,
 		})

@@ -2,57 +2,42 @@ package download
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
-	"github.com/comunidade-shallom/diakonos/pkg/fileutils"
-	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
-	"github.com/gosimple/slug"
 	youtube "github.com/kkdai/youtube/v2"
 	ytdl "github.com/kkdai/youtube/v2/downloader"
 	"github.com/pterm/pterm"
 	"golang.org/x/net/http/httpproxy"
 )
 
-var ErrExist = errors.Business("file already exist (%s)", "DC:001")
+func YouTube(ctx context.Context, params Params) (Output, *youtube.Video, error) {
+	out := Output{}
 
-func YouTube(ctx context.Context, options DownloadParams) (DownloadedFile, *youtube.Video, error) {
-	out := DownloadedFile{
-		DownloadParams: options,
-	}
-	client := youtubeClient(options.OutputDir)
+	client := youtubeClient(params.OutputDir)
 
-	video, err := client.GetVideo(options.From)
+	video, err := client.GetVideo(params.Source)
 
 	if err != nil {
 		return out, video, err
 	}
 
-	name := fmt.Sprintf(
-		"%s--%s.%s",
-		slug.Make(video.Title), options.Quality, options.MimeType,
-	)
+	out.Filename = params.Filename(video.Title)
 
-	out.Name = path.Join(options.OutputDir, name)
-
-	if fileutils.FileExists(out.Name) {
-		return out, video, ErrExist.Msgf(fileutils.GetRelative(out.Name))
+	if out.Exists() {
+		return out, video, ErrExist.Msgf(out.NameRelative())
 	}
 
 	pterm.Info.Printfln("Downloading: %s", video.Title)
-	pterm.Info.Printfln("Quality: %s", options.Quality)
-	pterm.Info.Printfln("MimeType: %s", options.MimeType)
-	pterm.Info.Printfln("Target: %s", fileutils.GetRelative(out.Name))
+	pterm.Info.Printfln("Quality: %s", params.Quality)
+	pterm.Info.Printfln("MimeType: %s", params.MimeType)
+	pterm.Info.Printfln("Target: %s", out.NameRelative())
+	pterm.Debug.Printfln("Target: %s", out.Filename)
+	pterm.Debug.Printfln("OutputDir: %s", params.OutputDir)
 
-	err = client.DownloadComposite(ctx, name, video, options.Quality, options.MimeType)
-
-	if err != nil {
-		return out, video, err
-	}
+	err = client.DownloadComposite(ctx, out.Name(), video, params.Quality, params.MimeType)
 
 	return out, video, err
 }
