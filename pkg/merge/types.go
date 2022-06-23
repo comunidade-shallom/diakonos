@@ -1,30 +1,49 @@
 package merge
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/base64"
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
-
-	"github.com/comunidade-shallom/diakonos/pkg/files"
 )
 
-type MergeParams struct {
+type Config struct {
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/merges"`
+}
+
+type Params struct {
 	Sources   []string
 	OutputDir string
 	Name      string
 }
 
-type MergedFile struct {
-	MergeParams
-	Name string
+func (c Config) Apply(params Params) (Params, error) {
+	if params.OutputDir == "" {
+		params.OutputDir = c.OutputDir
+	}
+
+	pwd, _ := os.Getwd()
+
+	for i, v := range params.Sources {
+		if path.IsAbs(v) {
+			continue
+		}
+
+		params.Sources[i] = path.Join(pwd, v)
+	}
+
+	return params, nil
 }
 
-func (p MergeParams) filename() string {
+func (p Params) Filename() string {
 	name := p.Name
 
 	if name == "" {
-		name = buildHashName(p.Sources)
+		name = p.HashName()
 	}
 
 	if !path.IsAbs(name) {
@@ -34,7 +53,7 @@ func (p MergeParams) filename() string {
 	return name
 }
 
-func (p MergeParams) tempFile() (*os.File, error) {
+func (p Params) tempFile() (*os.File, error) {
 	file, err := ioutil.TempFile(p.OutputDir, "videos-to-merge.*.txt")
 	if err != nil {
 		return nil, err
@@ -54,6 +73,16 @@ func (p MergeParams) tempFile() (*os.File, error) {
 	return file, err
 }
 
-func (m MergedFile) fileExists() bool {
-	return files.FileExists(m.Name)
+func (p Params) HashName() string {
+	var buffer bytes.Buffer
+
+	for _, v := range p.Sources {
+		buffer.WriteString(v)
+		buffer.WriteString("#")
+	}
+
+	sum := sha256.Sum256(buffer.Bytes())
+	ext := filepath.Ext(p.Sources[0])
+
+	return base64.RawURLEncoding.EncodeToString(sum[:]) + ext
 }

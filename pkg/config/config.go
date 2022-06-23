@@ -6,23 +6,16 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/audios"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
+	"github.com/comunidade-shallom/diakonos/pkg/merge"
 )
 
 type ctxKey struct{}
-
-type AudioOptions struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/audios"`
-}
-
-type MergeOptions struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/merges"`
-}
 
 type AppConfig struct {
 	Download download.Config
 	Cut      cut.Config
 	Audio    audios.Config
-	Merge    MergeOptions
+	Merge    merge.Config
 }
 
 func Ctx(ctx context.Context) AppConfig {

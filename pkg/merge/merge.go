@@ -2,7 +2,6 @@ package merge
 
 import (
 	"os"
-	"path"
 
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
@@ -12,15 +11,13 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DM:001")
 
-func MergeFiles(options MergeParams) (MergedFile, error) {
-	out := MergedFile{
-		MergeParams: options,
+func Files(options Params) (files.Output, error) {
+	out := files.Output{
+		Filename: options.Filename(),
 	}
 
-	out.Name = options.filename()
-
-	if out.fileExists() {
-		return out, ErrExist.Msgf(files.GetRelative(out.Name))
+	if out.Exists() {
+		return out, ErrExist.Msgf(out.NameRelative())
 	}
 
 	tmp, err := options.tempFile()
@@ -30,11 +27,13 @@ func MergeFiles(options MergeParams) (MergedFile, error) {
 
 	defer os.Remove(tmp.Name())
 
-	pterm.Info.Printfln("Generating: %s", path.Base(out.Name))
+	pterm.Info.Printfln("Generating: %s", out.NameRelative())
+	pterm.Debug.Printfln("Target: %s", out.Filename)
+	pterm.Debug.Printfln("Temp file: %s", tmp.Name())
 
 	err = ffmpeg.
 		Input(tmp.Name(), ffmpeg.KwArgs{"f": "concat", "safe": "0"}).
-		Output(out.Name, ffmpeg.KwArgs{"c": "copy"}).
+		Output(out.Filename, ffmpeg.KwArgs{"c": "copy"}).
 		Run()
 
 	return out, err

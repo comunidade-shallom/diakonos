@@ -1,11 +1,7 @@
 package video
 
 import (
-	"os"
-	"path"
-
 	"github.com/comunidade-shallom/diakonos/pkg/config"
-	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/merge"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
@@ -23,45 +19,28 @@ var CmdMerge = &cli.Command{
 		},
 	},
 	Action: func(ctx *cli.Context) error {
-		sources, err := buildSources(ctx.Args().Slice())
-		if err != nil {
-			return err
-		}
+		sources := ctx.Args().Slice()
 
-		for _, v := range sources {
-			pterm.Debug.Println(v)
+		if len(sources) == 0 {
+			return ErrorMissingSourceArgument
 		}
 
 		cfg := config.Ctx(ctx.Context)
 
-		out, err := merge.MergeFiles(merge.MergeParams{
-			OutputDir: cfg.Merge.OutputDir,
-			Sources:   sources,
-			Name:      ctx.String("name"),
+		params, err := cfg.Merge.Apply(merge.Params{
+			Sources: sources,
+			Name:    ctx.String("name"),
 		})
+		if err != nil {
+			return err
+		}
+
+		out, err := merge.Files(params)
 
 		if err == nil {
-			pterm.Success.Printfln("Done: %s", files.GetRelative(out.Name))
+			pterm.Success.Printfln("Done: %s", out.NameRelative())
 		}
 
 		return err
 	},
-}
-
-func buildSources(sources []string) ([]string, error) {
-	if len(sources) == 0 {
-		return sources, ErrorMissingSourceArgument
-	}
-
-	pwd, _ := os.Getwd()
-
-	for i, v := range sources {
-		if path.IsAbs(v) {
-			continue
-		}
-
-		sources[i] = path.Join(pwd, v)
-	}
-
-	return sources, nil
 }
