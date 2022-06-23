@@ -1,4 +1,4 @@
-package process
+package pipeline
 
 import (
 	"io/ioutil"
@@ -17,7 +17,7 @@ var (
 )
 
 var Cmd = &cli.Command{
-	Name:  "process",
+	Name:  "pipeline",
 	Usage: "Process a .yml file and dynamic generate multimedia assets",
 	Action: func(c *cli.Context) error {
 
