@@ -12,31 +12,25 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")
 
-func CutFile(options CutParams) (CroppedFile, error) {
-	out := CroppedFile{
-		CutParams: options,
+func CutFile(options Params) (files.Output, error) {
+	out := files.Output{
+		Filename: options.Filename(),
 	}
 
-	name := fmt.Sprintf(
-		"%v-%v--%s",
-		options.Start.Seconds(),
-		options.Finish.Seconds(),
-		path.Base(options.Source),
-	)
-
-	out.Name = path.Join(options.OutputDir, name)
-
-	if files.FileExists(out.Name) {
-		return out, ErrExist.Msgf(files.GetRelative(out.Name))
+	if out.Exists() {
+		return out, ErrExist.Msgf(out.NameRelative())
 	}
 
 	pterm.Info.Printfln("Cropping: %s", path.Base(options.Source))
 	pterm.Info.Printfln("Start: %s", options.Start)
 	pterm.Info.Printfln("Finish: %s", options.Finish)
+	pterm.Debug.Printfln("Target: %s", options.Source)
+	pterm.Debug.Printfln("OutputDir: %s", options.OutputDir)
+	pterm.Debug.Printfln("Target: %s", out.Filename)
 
 	err := ffmpeg.
 		Input(options.Source).
-		Output(out.Name, ffmpeg.KwArgs{
+		Output(out.Filename, ffmpeg.KwArgs{
 			"ss":  fmt.Sprintf("%f", options.Start.Seconds()),
 			"to":  fmt.Sprintf("%f", options.Finish.Seconds()),
 			"c:v": "copy",

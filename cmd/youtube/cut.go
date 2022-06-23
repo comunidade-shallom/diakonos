@@ -66,22 +66,27 @@ var CmdCut = &cli.Command{
 		start := c.Duration("start")
 		finish := c.Duration("finish")
 
-		croppedFile, err := cut.CutFile(cut.CutParams{
-			OutputDir: cfg.Cut.OutputDir,
-			Source:    videoFile.Filename,
-			Start:     start,
-			Finish:    finish,
+		cutParams, err := cfg.Cut.Apply(cut.Params{
+			Source: videoFile.Filename,
+			Start:  start,
+			Finish: finish,
 		})
 
 		if err != nil {
 			return err
 		}
 
-		pterm.Success.Printfln("Done: %s", files.GetRelative(croppedFile.Name))
+		croppedFile, err := cut.CutFile(cutParams)
+
+		if err != nil {
+			return err
+		}
+
+		pterm.Success.Printfln("Done: %s", croppedFile.NameRelative())
 
 		if c.Bool("extract-audio") {
 			audioFile, err := extract.Audio(extract.ExtractParams{
-				Source:    croppedFile.Name,
+				Source:    croppedFile.Filename,
 				OutputDir: cfg.Audio.OutputDir,
 			})
 
@@ -92,7 +97,9 @@ var CmdCut = &cli.Command{
 			pterm.Success.Printfln("Done: %s", files.GetRelative(audioFile.Name))
 		}
 
-		pterm.Success.Printfln("Done")
+		if err == nil {
+			pterm.Success.Printfln("All done")
+		}
 
 		return err
 	},

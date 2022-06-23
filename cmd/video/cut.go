@@ -1,9 +1,6 @@
 package video
 
 import (
-	"os"
-	"path"
-
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
@@ -41,17 +38,17 @@ var CmdCut = &cli.Command{
 		start := c.Duration("start")
 		finish := c.Duration("finish")
 
-		if !path.IsAbs(source) {
-			pwd, _ := os.Getwd()
-			source = path.Join(pwd, source)
+		params, err := cfg.Cut.Apply(cut.Params{
+			Source: source,
+			Start:  start,
+			Finish: finish,
+		})
+
+		if err != nil {
+			return err
 		}
 
-		_, err := cut.CutFile(cut.CutParams{
-			OutputDir: cfg.Cut.OutputDir,
-			Source:    source,
-			Start:     start,
-			Finish:    finish,
-		})
+		_, err = cut.CutFile(params)
 
 		return err
 	},

@@ -125,7 +125,7 @@ func (p Pipeline) runCutVideo(act ActionDefinition) (Output, error) {
 		return Output{}, err
 	}
 
-	params, err := cut.Params(act.Params, p.cfg.Cut)
+	params, err := p.cfg.Cut.Params(act.Params)
 
 	if err != nil {
 		return Output{}, err
@@ -136,7 +136,7 @@ func (p Pipeline) runCutVideo(act ActionDefinition) (Output, error) {
 	o, err := cut.CutFile(params)
 
 	return Output{
-		Filename: o.Name,
+		Filename: o.Filename,
 	}, err
 }
 

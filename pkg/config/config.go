@@ -3,14 +3,11 @@ package config
 import (
 	"context"
 
+	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 )
 
 type ctxKey struct{}
-
-type CutOptions struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/cuts"`
-}
 
 type AudioOptions struct {
 	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/audios"`
@@ -22,7 +19,7 @@ type MergeOptions struct {
 
 type AppConfig struct {
 	Download download.Config
-	Cut      CutOptions
+	Cut      cut.Config
 	Audio    AudioOptions
 	Merge    MergeOptions
 }
