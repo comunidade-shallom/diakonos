@@ -22,8 +22,8 @@ var CmdMerge = &cli.Command{
 			Required:    false,
 		},
 	},
-	Action: func(c *cli.Context) error {
-		sources, err := buildSources(c.Args().Slice())
+	Action: func(ctx *cli.Context) error {
+		sources, err := buildSources(ctx.Args().Slice())
 		if err != nil {
 			return err
 		}
@@ -32,12 +32,12 @@ var CmdMerge = &cli.Command{
 			pterm.Debug.Println(v)
 		}
 
-		cfg := config.Ctx(c.Context)
+		cfg := config.Ctx(ctx.Context)
 
 		out, err := merge.MergeFiles(merge.MergeParams{
 			OutputDir: cfg.Merge.OutputDir,
 			Sources:   sources,
-			Name:      c.String("name"),
+			Name:      ctx.String("name"),
 		})
 
 		if err == nil {

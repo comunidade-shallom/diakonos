@@ -17,8 +17,8 @@ var ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DP:0
 var Cmd = &cli.Command{
 	Name:  "pipeline",
 	Usage: "Process a .yml file and dynamic generate multimedia assets",
-	Action: func(c *cli.Context) error {
-		source := c.Args().First()
+	Action: func(ctx *cli.Context) error {
+		source := ctx.Args().First()
 
 		if source == "" {
 			return ErrorMissingSourceArgument
@@ -42,9 +42,9 @@ var Cmd = &cli.Command{
 			return err
 		}
 
-		cfg := config.Ctx(c.Context)
+		cfg := config.Ctx(ctx.Context)
 
-		_, err = collection.Run(c.Context, cfg)
+		_, err = collection.Run(ctx.Context, cfg)
 
 		return err
 	},

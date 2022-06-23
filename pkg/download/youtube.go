@@ -1,3 +1,4 @@
+//nolint:gomnd
 package download
 
 import (
@@ -45,8 +46,8 @@ func youtubeClient(outputDir string) *ytdl.Downloader {
 	proxyFunc := httpproxy.FromEnvironment().ProxyFunc()
 
 	httpTransport := &http.Transport{
-		Proxy: func(r *http.Request) (uri *url.URL, err error) {
-			return proxyFunc(r.URL)
+		Proxy: func(req *http.Request) (*url.URL, error) {
+			return proxyFunc(req.URL)
 		},
 		IdleConnTimeout:       60 * time.Second,
 		TLSHandshakeTimeout:   10 * time.Second,

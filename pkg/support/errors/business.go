@@ -1,7 +1,6 @@
 package errors
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -21,6 +20,7 @@ func Business(message, code string) BusinessError {
 
 func (e BusinessError) Msgf(params ...interface{}) BusinessError {
 	e.Message = fmt.Sprintf(e.Message, params...)
+
 	return e
 }
 
@@ -33,20 +33,14 @@ func NotFound(resource, code string) NotFoundError {
 
 // Error string.
 func (e BusinessError) Error() string {
-	var b strings.Builder
+	var builder strings.Builder
 
 	if len(e.ErrorCode) > 0 {
-		b.WriteString(e.ErrorCode)
-		b.WriteString(": ")
+		builder.WriteString(e.ErrorCode)
+		builder.WriteString(": ")
 	}
 
-	b.WriteString(e.Message)
+	builder.WriteString(e.Message)
 
-	return b.String()
-}
-
-// ToJSON error.
-func (e BusinessError) ToJSON() []byte {
-	res, _ := json.Marshal(e)
-	return res
+	return builder.String()
 }

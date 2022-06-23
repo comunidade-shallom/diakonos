@@ -17,8 +17,8 @@ var CmdExtract = &cli.Command{
 
 var CmdExtractAudio = &cli.Command{
 	Name: "audio",
-	Action: func(c *cli.Context) error {
-		source := c.Args().First()
+	Action: func(ctx *cli.Context) error {
+		source := ctx.Args().First()
 
 		if source == "" {
 			return ErrorMissingSourceArgument
@@ -29,7 +29,7 @@ var CmdExtractAudio = &cli.Command{
 			source = path.Join(pwd, source)
 		}
 
-		cfg := config.Ctx(c.Context)
+		cfg := config.Ctx(ctx.Context)
 
 		params, err := cfg.Audio.Apply(audios.Params{
 			Source: source,

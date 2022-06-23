@@ -17,13 +17,13 @@ var CmdConfig = &cli.Command{
 	Action: func(ctx *cli.Context) error {
 		cfg := config.Ctx(ctx.Context)
 
-		d, err := yaml.Marshal(&cfg)
+		data, err := yaml.Marshal(&cfg)
 		if err != nil {
 			return ErrFailToMarshalConfig.WithErr(err)
 		}
 
 		os.Stdout.WriteString("\n")
-		os.Stdout.Write(d)
+		os.Stdout.Write(data)
 		os.Stdout.WriteString("\n")
 
 		return nil

@@ -36,25 +36,26 @@ func main() {
 			},
 		},
 		Commands: []*cli.Command{youtube.Cmd, video.Cmd, pipeline.Cmd, cmd.CmdConfig},
-		Before: func(c *cli.Context) error {
-			pterm.Debug.Debugger = !c.Bool("debug")
+		Before: func(ctx *cli.Context) error {
+			pterm.Debug.Debugger = !ctx.Bool("debug")
 
 			pterm.DefaultHeader.
-				WithMargin(5).
+				WithMargin(5). //nolint:gomnd
 				Println("Diakonos CLI")
 
-			appConfig, err := config.Load(c.String("config"))
+			appConfig, err := config.Load(ctx.String("config"))
 			if err != nil {
-				e, ok := err.(errors.BusinessError)
+				e, ok := err.(errors.BusinessError) //nolint:errorlint
 				if ok && e.ErrorCode == config.ConfigFileWasCreated.ErrorCode {
 					pterm.Warning.Println(err.Error())
 				} else {
 					pterm.Fatal.PrintOnErrorf("Fail to load config (%s)", err)
+
 					return err
 				}
 			}
 
-			c.Context = appConfig.WithContext(c.Context)
+			ctx.Context = appConfig.WithContext(ctx.Context)
 
 			pterm.Debug.Printfln("Config loaded")
 
@@ -71,8 +72,7 @@ func main() {
 	sort.Sort(cli.FlagsByName(app.Flags))
 	sort.Sort(cli.CommandsByName(app.Commands))
 
-	err := app.Run(os.Args)
-	if err != nil {
+	if err := app.Run(os.Args); err != nil {
 		pterm.Error.Println(err.Error())
 		os.Exit(1)
 	}

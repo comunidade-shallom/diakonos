@@ -14,22 +14,19 @@ func System(reason error, message, code string) SystemError {
 	}
 }
 
-func (e SystemError) ToJSON() []byte {
-	return e.BusinessError.ToJSON()
-}
-
 func (e SystemError) WithErr(err error) SystemError {
 	e.Reason = err
+
 	return e
 }
 
 func (e SystemError) Error() string {
-	var b strings.Builder
+	var builder strings.Builder
 
-	b.WriteString(e.BusinessError.Error())
-	b.WriteString(" (")
-	b.WriteString(e.Reason.Error())
-	b.WriteString(")")
+	builder.WriteString(e.BusinessError.Error())
+	builder.WriteString(" (")
+	builder.WriteString(e.Reason.Error())
+	builder.WriteString(")")
 
-	return b.String()
+	return builder.String()
 }

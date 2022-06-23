@@ -19,39 +19,39 @@ type Params struct {
 }
 
 func (c Config) Params(raw map[string]string) (Params, error) {
-	p := Params{
+	params := Params{
 		Source:    raw["source"],
 		OutputDir: raw["output_dir"],
 	}
 
 	start, err := time.ParseDuration(raw["start"])
 	if err != nil {
-		return p, err
+		return params, err
 	}
 
-	p.Start = start
+	params.Start = start
 
 	finish, err := time.ParseDuration(raw["finish"])
 	if err != nil {
-		return p, err
+		return params, err
 	}
 
-	p.Finish = finish
+	params.Finish = finish
 
-	return c.Apply(p)
+	return c.Apply(params)
 }
 
-func (c Config) Apply(p Params) (Params, error) {
-	if p.OutputDir == "" {
-		p.OutputDir = c.OutputDir
+func (c Config) Apply(params Params) (Params, error) {
+	if params.OutputDir == "" {
+		params.OutputDir = c.OutputDir
 	}
 
-	if !path.IsAbs(p.Source) {
+	if !path.IsAbs(params.Source) {
 		pwd, _ := os.Getwd()
-		p.Source = path.Join(pwd, p.Source)
+		params.Source = path.Join(pwd, params.Source)
 	}
 
-	return p, nil
+	return params, nil
 }
 
 func (p Params) Filename() string {

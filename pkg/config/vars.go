@@ -29,12 +29,12 @@ func Commit() string {
 	return commit
 }
 
-func Host() string {
-	h, _ := os.Hostname()
+func Hostname() string {
+	host, _ := os.Hostname()
 
-	if h == "" {
-		h = "unknown"
+	if host == "" {
+		host = "unknown"
 	}
 
-	return h
+	return host
 }

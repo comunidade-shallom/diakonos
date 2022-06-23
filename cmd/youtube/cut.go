@@ -40,14 +40,15 @@ var CmdCut = &cli.Command{
 	Name:  "cut",
 	Usage: "Crop YouTube video",
 	Flags: cutFlags,
-	Action: func(c *cli.Context) error {
-		params, err := getDownloadParams(c)
+	Action: func(ctx *cli.Context) error {
+		params, err := getDownloadParams(ctx)
 		if err != nil {
 			return err
 		}
 
-		videoFile, _, err := download.YouTube(c.Context, params)
+		videoFile, _, err := download.YouTube(ctx.Context, params)
 		if err != nil {
+			//nolint:errorlint
 			if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 				pterm.Warning.Println(e.Error())
 			} else {
@@ -57,10 +58,10 @@ var CmdCut = &cli.Command{
 
 		pterm.Success.Printfln("Done: %s", videoFile.NameRelative())
 
-		cfg := config.Ctx(c.Context)
+		cfg := config.Ctx(ctx.Context)
 
-		start := c.Duration("start")
-		finish := c.Duration("finish")
+		start := ctx.Duration("start")
+		finish := ctx.Duration("finish")
 
 		cutParams, err := cfg.Cut.Apply(cut.Params{
 			Source: videoFile.Filename,
@@ -78,7 +79,7 @@ var CmdCut = &cli.Command{
 
 		pterm.Success.Printfln("Done: %s", croppedFile.NameRelative())
 
-		if c.Bool("extract-audio") {
+		if ctx.Bool("extract-audio") {
 			extractParams, err := cfg.Audio.Apply(audios.Params{
 				Source: croppedFile.Filename,
 			})

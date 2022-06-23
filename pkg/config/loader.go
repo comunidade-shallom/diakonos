@@ -20,7 +20,11 @@ var (
 	ConfigFileWasCreated = errors.Business("a new config file was created (%s)", "DCONF:003")
 )
 
-func Load(file string) (cfg AppConfig, err error) {
+func Load(file string) (AppConfig, error) {
+	var err error
+
+	cfg := AppConfig{}
+
 	if file != "" {
 		err = fig.Load(&cfg,
 			fig.File(filepath.Base(file)),
@@ -63,6 +67,7 @@ func Load(file string) (cfg AppConfig, err error) {
 	return applyDefaults(cfg)
 }
 
+//nolint:cyclop
 func applyDefaults(cfg AppConfig) (AppConfig, error) {
 	pwd, _ := os.Getwd()
 
@@ -113,10 +118,12 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 	return cfg, nil
 }
 
-func ensureConfig() (cfg AppConfig, err error) {
-	err = defaults.Set(&cfg)
+func ensureConfig() (AppConfig, error) {
+	var err error
 
-	if err != nil {
+	cfg := AppConfig{}
+
+	if err = defaults.Set(&cfg); err != nil {
 		return cfg, ErrFailEnsureConfig.WithErr(err)
 	}
 

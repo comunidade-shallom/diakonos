@@ -24,17 +24,17 @@ var CmdCut = &cli.Command{
 			Required: true,
 		},
 	},
-	Action: func(c *cli.Context) error {
-		source := c.Args().First()
+	Action: func(ctx *cli.Context) error {
+		source := ctx.Args().First()
 
 		if source == "" {
 			return ErrorMissingSourceArgument
 		}
 
-		cfg := config.Ctx(c.Context)
+		cfg := config.Ctx(ctx.Context)
 
-		start := c.Duration("start")
-		finish := c.Duration("finish")
+		start := ctx.Duration("start")
+		finish := ctx.Duration("finish")
 
 		params, err := cfg.Cut.Apply(cut.Params{
 			Source: source,

@@ -29,30 +29,28 @@ type Output struct {
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")
 
 func (c Config) FromRaw(raw map[string]string) (Params, error) {
-	p := Params{
+	return c.Apply(Params{
 		Source:    raw["source"],
 		Quality:   raw["quality"],
 		OutputDir: raw["output_dir"],
 		MimeType:  raw["mime_type"],
-	}
-
-	return c.Apply(p)
+	})
 }
 
-func (c Config) Apply(p Params) (Params, error) {
-	if p.OutputDir == "" {
-		p.OutputDir = c.OutputDir
+func (c Config) Apply(params Params) (Params, error) {
+	if params.OutputDir == "" {
+		params.OutputDir = c.OutputDir
 	}
 
-	if p.Quality == "" {
-		p.Quality = c.Quality
+	if params.Quality == "" {
+		params.Quality = c.Quality
 	}
 
-	if p.MimeType == "" {
-		p.MimeType = c.MimeType
+	if params.MimeType == "" {
+		params.MimeType = c.MimeType
 	}
 
-	return p, nil
+	return params, nil
 }
 
 func (p Params) Filename(title string) string {

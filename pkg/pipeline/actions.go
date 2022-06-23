@@ -28,19 +28,20 @@ func (e *ActionSource) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	if err == nil {
 		e.Value = val
+
 		return nil
 	}
 
 	// extract from map (to be used in nested actions)
-	var m map[string]string
+	var data map[string]string
 
-	err = unmarshal(&m)
+	err = unmarshal(&data)
 
 	if err != nil {
 		return err
 	}
 
-	action := m["action"]
+	action := data["action"]
 
 	if action == "" {
 		return ErrMissingAction

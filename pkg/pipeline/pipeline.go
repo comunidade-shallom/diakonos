@@ -1,3 +1,4 @@
+//nolint:errorlint,containedctx
 package pipeline
 
 import (
@@ -51,22 +52,22 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]Ou
 }
 
 func (p Pipeline) getSource(act ActionDefinition) (Source, error) {
-	s := act.Source
+	source := act.Source
 
-	if s.Value != "" {
+	if source.Value != "" {
 		return Source{
-			Value: s.Value,
+			Value: source.Value,
 		}, nil
 	}
 
-	if s.Action == "" {
+	if source.Action == "" {
 		return Source{}, ErrSourceIsEmpty.Msgf(act.ID, act.Type)
 	}
 
-	out, ok := p.outputs[s.Action]
+	out, ok := p.outputs[source.Action]
 
 	if !ok {
-		return Source{}, ErrActionSourceIsNotAvailable.Msgf(s.Action, act.ID, act.Type)
+		return Source{}, ErrActionSourceIsNotAvailable.Msgf(source.Action, act.ID, act.Type)
 	}
 
 	return Source{
@@ -100,7 +101,7 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 
 	params.Source = source.Value
 
-	f, _, err := download.YouTube(p.ctx, params)
+	out, _, err := download.YouTube(p.ctx, params)
 	if err != nil {
 		if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 			pterm.Warning.Println(e.Error())
@@ -110,7 +111,7 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 	}
 
 	return Output{
-		Filename: f.Filename,
+		Filename: out.Filename,
 	}, nil
 }
 

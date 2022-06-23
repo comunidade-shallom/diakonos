@@ -20,13 +20,13 @@ var CmdDownload = &cli.Command{
 			Name: "mime_type",
 		},
 	},
-	Action: func(c *cli.Context) error {
-		params, err := getDownloadParams(c)
+	Action: func(ctx *cli.Context) error {
+		params, err := getDownloadParams(ctx)
 		if err != nil {
 			return err
 		}
 
-		_, _, err = download.YouTube(c.Context, params)
+		_, _, err = download.YouTube(ctx.Context, params)
 
 		if err != nil {
 			return err

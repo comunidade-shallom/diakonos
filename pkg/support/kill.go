@@ -1,3 +1,4 @@
+//nolint:gomnd
 package support
 
 import (
@@ -6,7 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	// "github.com/rs/zerolog".
 )
 
 func WithKillSignal(ctx context.Context) (context.Context, context.CancelFunc) {

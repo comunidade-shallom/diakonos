@@ -1,3 +1,4 @@
+//nolint:gomnd
 package fileutils
 
 import (
@@ -37,7 +38,9 @@ type VideoInfo struct {
 	Format  VideoFormat   `json:"format"`
 }
 
-func GetVideoInfo(source string) (info VideoInfo, err error) {
+func GetVideoInfo(source string) (VideoInfo, error) {
+	var info VideoInfo
+
 	j, err := ffmpeg.ProbeWithTimeout(source, time.Second*5, ffmpeg.KwArgs{})
 	if err != nil {
 		return info, err
@@ -48,7 +51,9 @@ func GetVideoInfo(source string) (info VideoInfo, err error) {
 	return info, err
 }
 
-func GetAudioStreams(source string) (list []VideoStream, err error) {
+func GetAudioStreams(source string) ([]VideoStream, error) {
+	list := []VideoStream{}
+
 	info, err := GetVideoInfo(source)
 	if err != nil {
 		return list, err

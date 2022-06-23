@@ -7,12 +7,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var ErrorMissingSourceArgument = errors.Business("Missing 'source' arg (eg.: https://www.youtube.com/watch?v=8yAbX8W3Caw)", "DCD:001")
+var ErrorMissingSourceArgument = errors.Business("Missing 'source' arg (eg.: https://www.youtube.com/watch?v=8yAbX8W3Caw)", "DCD:001") //nolint:lll
 
-func getDownloadParams(c *cli.Context) (download.Params, error) {
-	conf := config.Ctx(c.Context)
+func getDownloadParams(ctx *cli.Context) (download.Params, error) {
+	conf := config.Ctx(ctx.Context)
 
-	source := c.Args().First()
+	source := ctx.Args().First()
 
 	if source == "" {
 		return download.Params{}, ErrorMissingSourceArgument
@@ -20,8 +20,8 @@ func getDownloadParams(c *cli.Context) (download.Params, error) {
 
 	return conf.Download.Apply(download.Params{
 		Source:    source,
-		OutputDir: c.String("output_dir"),
-		Quality:   c.String("quality"),
-		MimeType:  c.String("mime_type"),
+		OutputDir: ctx.String("output_dir"),
+		Quality:   ctx.String("quality"),
+		MimeType:  ctx.String("mime_type"),
 	})
 }
