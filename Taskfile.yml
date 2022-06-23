@@ -6,8 +6,9 @@ vars:
   PKG_NAME: github.com/comunidade-shallom/diakonos
   APP_BASE_NAME: diakonos
   DIR_DIST: ./bin
-  APP_VERSION: 0.2.0-beta
   BUILD_DATE: '{{now | date "2006-01-02T15:04:05"}}'
+  APP_VERSION:
+    sh: git describe --dirty --always --tags
   GIT_HASH:
     sh: git log -n 1 --format=%h | echo "unknow"
 
