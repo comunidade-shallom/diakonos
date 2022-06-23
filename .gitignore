@@ -11,7 +11,8 @@ logs
 *.dylib
 
 # vscode
-.vscode
+.vscode/*
+!.vscode/extensions.json
 
 vendor
 dist
