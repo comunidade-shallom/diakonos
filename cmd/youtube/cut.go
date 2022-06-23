@@ -52,7 +52,7 @@ var CmdCut = &cli.Command{
 		videoFile, _, err := download.YouTube(c.Context, params)
 
 		if err != nil {
-			if e, ok := err.(errors.BusinessError); ok {
+			if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 				pterm.Warning.Println(e.Error())
 			} else {
 				return err
