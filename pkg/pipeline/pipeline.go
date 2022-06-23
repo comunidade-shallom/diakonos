@@ -3,10 +3,10 @@ package pipeline
 import (
 	"context"
 
+	"github.com/comunidade-shallom/diakonos/pkg/audios"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
-	"github.com/comunidade-shallom/diakonos/pkg/extract"
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
@@ -147,7 +147,7 @@ func (p Pipeline) runExtractAudio(act ActionDefinition) (Output, error) {
 		return Output{}, err
 	}
 
-	params, err := extract.Params(act.Params, p.cfg.Audio)
+	params, err := p.cfg.Audio.FromRaw(act.Params)
 
 	if err != nil {
 		return Output{}, err
@@ -155,9 +155,9 @@ func (p Pipeline) runExtractAudio(act ActionDefinition) (Output, error) {
 
 	params.Source = source.Value
 
-	o, err := extract.Audio(params)
+	o, err := audios.Extract(params)
 
 	return Output{
-		Filename: o.Name,
+		Filename: o.Filename,
 	}, err
 }

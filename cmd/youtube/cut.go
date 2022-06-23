@@ -1,11 +1,10 @@
 package youtube
 
 import (
+	"github.com/comunidade-shallom/diakonos/pkg/audios"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
-	"github.com/comunidade-shallom/diakonos/pkg/extract"
-	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
@@ -85,16 +84,21 @@ var CmdCut = &cli.Command{
 		pterm.Success.Printfln("Done: %s", croppedFile.NameRelative())
 
 		if c.Bool("extract-audio") {
-			audioFile, err := extract.Audio(extract.ExtractParams{
-				Source:    croppedFile.Filename,
-				OutputDir: cfg.Audio.OutputDir,
+			extractParams, err := cfg.Audio.Apply(audios.Params{
+				Source: croppedFile.Filename,
 			})
 
 			if err != nil {
 				return err
 			}
 
-			pterm.Success.Printfln("Done: %s", files.GetRelative(audioFile.Name))
+			audioFile, err := audios.Extract(extractParams)
+
+			if err != nil {
+				return err
+			}
+
+			pterm.Success.Printfln("Done: %s", audioFile.NameRelative())
 		}
 
 		if err == nil {

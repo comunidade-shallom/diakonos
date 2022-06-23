@@ -4,9 +4,8 @@ import (
 	"os"
 	"path"
 
+	"github.com/comunidade-shallom/diakonos/pkg/audios"
 	"github.com/comunidade-shallom/diakonos/pkg/config"
-	"github.com/comunidade-shallom/diakonos/pkg/extract"
-	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 )
@@ -32,12 +31,19 @@ var CmdExtractAudio = &cli.Command{
 
 		cfg := config.Ctx(c.Context)
 
-		file, err := extract.Audio(extract.ExtractParams{
-			Source:    source,
-			OutputDir: cfg.Audio.OutputDir,
+		params, err := cfg.Audio.Apply(audios.Params{
+			Source: source,
 		})
 
-		pterm.Success.Printfln("Done: %s", files.GetRelative(file.Name))
+		if err != nil {
+			return err
+		}
+
+		file, err := audios.Extract(params)
+
+		if err == nil {
+			pterm.Success.Printfln("Done: %s", file.NameRelative())
+		}
 
 		return err
 	},

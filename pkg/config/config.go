@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 
+	"github.com/comunidade-shallom/diakonos/pkg/audios"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 )
@@ -20,7 +21,7 @@ type MergeOptions struct {
 type AppConfig struct {
 	Download download.Config
 	Cut      cut.Config
-	Audio    AudioOptions
+	Audio    audios.Config
 	Merge    MergeOptions
 }
 
