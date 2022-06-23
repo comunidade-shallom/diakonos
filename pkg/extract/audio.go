@@ -9,6 +9,8 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DE:001")
 
+const bitrate = 192000
+
 func Audio(options ExtractParams) (ExtractedFile, error) {
 	out := ExtractedFile{
 		ExtractParams: options,
@@ -25,7 +27,7 @@ func Audio(options ExtractParams) (ExtractedFile, error) {
 
 	err := ffmpeg.Input(options.Source).
 		Audio().
-		Output(out.Name, ffmpeg.KwArgs{"f": "mp3", "ab": 192000, "vn": ""}).
+		Output(out.Name, ffmpeg.KwArgs{"f": "mp3", "b:a": bitrate, "vn": ""}).
 		Run()
 
 	return out, err
