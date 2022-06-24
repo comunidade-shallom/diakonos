@@ -12,7 +12,7 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")
 
-func CutFile(options Params) (files.Output, error) {
+func Video(options Params) (files.Output, error) {
 	out := files.Output{
 		Filename: options.Filename(),
 	}

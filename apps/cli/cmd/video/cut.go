@@ -45,7 +45,7 @@ var CmdCut = &cli.Command{
 			return err
 		}
 
-		_, err = cut.CutFile(params)
+		_, err = cut.Video(params)
 
 		return err
 	},

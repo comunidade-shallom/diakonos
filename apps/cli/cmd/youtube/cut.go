@@ -72,7 +72,7 @@ var CmdCut = &cli.Command{
 			return err
 		}
 
-		croppedFile, err := cut.CutFile(cutParams)
+		croppedFile, err := cut.Video(cutParams)
 		if err != nil {
 			return err
 		}

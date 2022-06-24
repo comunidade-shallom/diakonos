@@ -24,6 +24,7 @@ func (p Pipeline) runDownload(ctx context.Context, act ActionDefinition) (files.
 
 	out, _, err := download.YouTube(ctx, params)
 	if err != nil {
+		//nolint:errorlint
 		if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 			pterm.Warning.Println(e.Error())
 		} else {
