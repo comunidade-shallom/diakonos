@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/comunidade-shallom/diakonos/pkg/support/collection"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/gosimple/slug"
 )
@@ -23,12 +24,12 @@ type Params struct {
 
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")
 
-func (c Config) FromRaw(raw map[string]string) (Params, error) {
+func (c Config) FromRaw(raw collection.Params) (Params, error) {
 	return c.Apply(Params{
-		Source:    raw["source"],
-		Quality:   raw["quality"],
-		OutputDir: raw["output_dir"],
-		MimeType:  raw["mime_type"],
+		Source:    raw.String("source"),
+		Quality:   raw.String("quality"),
+		OutputDir: raw.String("output_dir"),
+		MimeType:  raw.String("mime_type"),
 	})
 }
 

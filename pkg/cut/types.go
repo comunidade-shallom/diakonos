@@ -5,6 +5,8 @@ import (
 	"os"
 	"path"
 	"time"
+
+	"github.com/comunidade-shallom/diakonos/pkg/support/collection"
 )
 
 type Config struct {
@@ -18,20 +20,20 @@ type Params struct {
 	Finish    time.Duration
 }
 
-func (c Config) Params(raw map[string]string) (Params, error) {
+func (c Config) Params(raw collection.Params) (Params, error) {
 	params := Params{
-		Source:    raw["source"],
-		OutputDir: raw["output_dir"],
+		Source:    raw.String("source"),
+		OutputDir: raw.String("output_dir"),
 	}
 
-	start, err := time.ParseDuration(raw["start"])
+	start, err := time.ParseDuration(raw.String("start"))
 	if err != nil {
 		return params, err
 	}
 
 	params.Start = start
 
-	finish, err := time.ParseDuration(raw["finish"])
+	finish, err := time.ParseDuration(raw.String("finish"))
 	if err != nil {
 		return params, err
 	}

@@ -9,12 +9,21 @@ import (
 	"github.com/pterm/pterm"
 )
 
-type Pipeline struct {
-	Name    string             `yml:"name"`
-	Actions []ActionDefinition `yml:"actions"`
-	outputs map[string]files.Output
-	cfg     config.AppConfig
-}
+type (
+	Action   string
+	Pipeline struct {
+		Name    string             `yml:"name"`
+		Actions []ActionDefinition `yml:"actions"`
+		outputs map[string]files.Output
+		cfg     config.AppConfig
+	}
+)
+
+const (
+	Download     Action = "download"
+	CutVideo     Action = "cut-video"
+	ExtractAudio Action = "extract-audio"
+)
 
 var (
 	ErrInvalidActionType          = errors.Business("invalid action type [%s/%s]", "DP:002")

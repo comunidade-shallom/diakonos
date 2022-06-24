@@ -2,6 +2,7 @@ package audios
 
 import (
 	"github.com/comunidade-shallom/diakonos/pkg/files"
+	"github.com/comunidade-shallom/diakonos/pkg/support/collection"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 )
 
@@ -16,10 +17,10 @@ type Params struct {
 
 var ErrExist = errors.Business("file already exist (%s)", "DE:001")
 
-func (c Config) FromRaw(raw map[string]string) (Params, error) {
+func (c Config) FromRaw(raw collection.Params) (Params, error) {
 	return c.Apply(Params{
-		Source:    raw["source"],
-		OutputDir: raw["output_dir"],
+		Source:    raw.String("source"),
+		OutputDir: raw.String("output_dir"),
 	})
 }
 
