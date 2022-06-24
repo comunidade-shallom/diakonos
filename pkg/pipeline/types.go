@@ -14,10 +14,11 @@ type (
 		Action string `yml:"action"`
 	}
 	ActionDefinition struct {
-		ID     string            `yml:"id"`
-		Type   Action            `yml:"type"`
-		Params collection.Params `yml:"params"`
-		Source ActionSource      `yml:"source"`
+		ID      string            `yml:"id"`
+		Type    Action            `yml:"type"`
+		Params  collection.Params `yml:"params"`
+		Source  ActionSource      `yml:"source"`
+		Sources []ActionSource    `yml:"sources"`
 	}
 )
 

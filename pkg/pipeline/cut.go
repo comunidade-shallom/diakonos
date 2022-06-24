@@ -8,7 +8,7 @@ import (
 )
 
 func (p Pipeline) runCutVideo(ctx context.Context, act ActionDefinition) (files.Output, error) {
-	source, err := p.getSource(act)
+	source, err := p.getSource(act.Source)
 	if err != nil {
 		return files.Output{}, err
 	}

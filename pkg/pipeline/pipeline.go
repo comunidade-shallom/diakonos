@@ -23,12 +23,14 @@ const (
 	Download     Action = "download"
 	CutVideo     Action = "cut-video"
 	ExtractAudio Action = "extract-audio"
+	MergeVideo   Action = "merge-video"
 )
 
 var (
 	ErrInvalidActionType          = errors.Business("invalid action type [%s/%s]", "DP:002")
-	ErrSourceIsEmpty              = errors.Business("source is empty [%s/%s]", "DP:003")
-	ErrActionSourceIsNotAvailable = errors.Business("action source (%s) is not available [%s/%s]", "DP:004")
+	ErrSourceIsEmpty              = errors.Business("source is empty", "DP:003")
+	ErrSourceListIsEmpty          = errors.Business("source list is empty", "DP:004")
+	ErrActionSourceIsNotAvailable = errors.Business("action source (%s) is not available [%s/%s]", "DP:005")
 )
 
 func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]files.Output, error) {
@@ -62,28 +64,45 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]fi
 	return p.outputs, nil
 }
 
-func (p Pipeline) getSource(act ActionDefinition) (Source, error) {
-	source := act.Source
-
-	if source.Value != "" {
+func (p Pipeline) getSource(act ActionSource) (Source, error) {
+	if act.Value != "" {
 		return Source{
-			Value: source.Value,
+			Value: act.Value,
 		}, nil
 	}
 
-	if source.Action == "" {
-		return Source{}, ErrSourceIsEmpty.Msgf(act.ID, act.Type)
+	if act.Action == "" {
+		return Source{}, ErrSourceIsEmpty
 	}
 
-	out, ok := p.outputs[source.Action]
+	out, ok := p.outputs[act.Action]
 
 	if !ok {
-		return Source{}, ErrActionSourceIsNotAvailable.Msgf(source.Action, act.ID, act.Type)
+		return Source{}, ErrActionSourceIsNotAvailable.Msgf(act.Action)
 	}
 
 	return Source{
 		Value: out.Filename,
 	}, nil
+}
+
+func (p Pipeline) getSources(sources []ActionSource) ([]Source, error) {
+	list := []Source{}
+
+	if len(sources) == 0 {
+		return list, ErrSourceListIsEmpty
+	}
+
+	for _, sourceInput := range sources {
+		src, err := p.getSource(sourceInput)
+		if err != nil {
+			return list, err
+		}
+
+		list = append(list, src)
+	}
+
+	return list, nil
 }
 
 func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Output, error) {
@@ -94,6 +113,8 @@ func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Ou
 		return p.runCutVideo(ctx, act)
 	case ExtractAudio:
 		return p.runExtractAudio(ctx, act)
+	case MergeVideo:
+		return p.runMergeVideo(ctx, act)
 	default:
 		return files.Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
 	}
