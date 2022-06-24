@@ -7,10 +7,6 @@ type (
 	}
 )
 
-type Output struct {
-	Filename string
-}
-
 const (
 	Download     Action = "download"
 	CutVideo     Action = "cut-video"

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/gosimple/slug"
 )
@@ -20,10 +19,6 @@ type Params struct {
 	Quality   string
 	MimeType  string
 	Source    string
-}
-
-type Output struct {
-	files.Output
 }
 
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")

@@ -8,14 +8,15 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	youtube "github.com/kkdai/youtube/v2"
 	ytdl "github.com/kkdai/youtube/v2/downloader"
 	"github.com/pterm/pterm"
 	"golang.org/x/net/http/httpproxy"
 )
 
-func YouTube(ctx context.Context, params Params) (Output, *youtube.Video, error) {
-	out := Output{}
+func YouTube(ctx context.Context, params Params) (files.Output, *youtube.Video, error) {
+	out := files.Output{}
 
 	client := youtubeClient(params.OutputDir)
 

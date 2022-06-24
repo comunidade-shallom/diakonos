@@ -16,7 +16,7 @@ import (
 type Pipeline struct {
 	Name    string             `yml:"name"`
 	Actions []ActionDefinition `yml:"actions"`
-	outputs map[string]Output
+	outputs map[string]files.Output
 	cfg     config.AppConfig
 	ctx     context.Context
 }
@@ -27,11 +27,11 @@ var (
 	ErrActionSourceIsNotAvailable = errors.Business("action source (%s) is not available [%s/%s]", "DP:004")
 )
 
-func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]Output, error) {
+func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]files.Output, error) {
 	p.cfg = cfg
 	p.ctx = ctx
 
-	p.outputs = make(map[string]Output)
+	p.outputs = make(map[string]files.Output)
 
 	for _, act := range p.Actions {
 		out, err := p.runAction(act)
@@ -75,7 +75,7 @@ func (p Pipeline) getSource(act ActionDefinition) (Source, error) {
 	}, nil
 }
 
-func (p Pipeline) runAction(act ActionDefinition) (Output, error) {
+func (p Pipeline) runAction(act ActionDefinition) (files.Output, error) {
 	switch act.Type {
 	case Download:
 		return p.runDownload(act)
@@ -84,19 +84,19 @@ func (p Pipeline) runAction(act ActionDefinition) (Output, error) {
 	case ExtractAudio:
 		return p.runExtractAudio(act)
 	default:
-		return Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
+		return files.Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
 	}
 }
 
-func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
+func (p Pipeline) runDownload(act ActionDefinition) (files.Output, error) {
 	source, err := p.getSource(act)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params, err := p.cfg.Download.FromRaw(act.Params)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params.Source = source.Value
@@ -106,51 +106,41 @@ func (p Pipeline) runDownload(act ActionDefinition) (Output, error) {
 		if e, ok := err.(errors.BusinessError); ok && e.ErrorCode == download.ErrExist.ErrorCode {
 			pterm.Warning.Println(e.Error())
 		} else {
-			return Output{}, err
+			return out, err
 		}
 	}
 
-	return Output{
-		Filename: out.Filename,
-	}, nil
+	return out, nil
 }
 
-func (p Pipeline) runCutVideo(act ActionDefinition) (Output, error) {
+func (p Pipeline) runCutVideo(act ActionDefinition) (files.Output, error) {
 	source, err := p.getSource(act)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params, err := p.cfg.Cut.Params(act.Params)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params.Source = source.Value
 
-	o, err := cut.CutFile(params)
-
-	return Output{
-		Filename: o.Filename,
-	}, err
+	return cut.CutFile(params)
 }
 
-func (p Pipeline) runExtractAudio(act ActionDefinition) (Output, error) {
+func (p Pipeline) runExtractAudio(act ActionDefinition) (files.Output, error) {
 	source, err := p.getSource(act)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params, err := p.cfg.Audio.FromRaw(act.Params)
 	if err != nil {
-		return Output{}, err
+		return files.Output{}, err
 	}
 
 	params.Source = source.Value
 
-	o, err := audios.Extract(params)
-
-	return Output{
-		Filename: o.Filename,
-	}, err
+	return audios.Extract(params)
 }
