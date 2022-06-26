@@ -36,6 +36,10 @@ func (p Params) Filename() string {
 	return files.ChangeLocation(p.Source, p.OutputDir, "mp3")
 }
 
+func (p Params) WithPrefix(prefix string) string {
+	return files.AddPrefix(p.Filename(), prefix)
+}
+
 func (p Params) SouceRelative() string {
 	return files.GetRelative(p.Source)
 }

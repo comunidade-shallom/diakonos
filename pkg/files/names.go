@@ -22,3 +22,10 @@ func ChangeLocation(original, targetDir, ext string) string {
 
 	return path.Join(targetDir, name)
 }
+
+func AddPrefix(original, prefix string) string {
+	name := path.Base(original)
+	dir := path.Dir(original)
+
+	return path.Join(dir, prefix+name)
+}
