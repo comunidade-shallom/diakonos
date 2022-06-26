@@ -20,11 +20,11 @@ type (
 )
 
 const (
-	Download       Action = "youtube-download"
-	CutVideo       Action = "video-cut"
-	ExtractAudio   Action = "video-extract-audio"
-	MergeVideo     Action = "video-merge"
-	AudioNormalize Action = "audio-normalize"
+	YoutubeDownload   Action = "youtube-download"
+	VideoCut          Action = "video-cut"
+	VideoExtractAudio Action = "video-extract-audio"
+	VideoMerge        Action = "video-merge"
+	AudioNormalize    Action = "audio-normalize"
 )
 
 var (
@@ -108,15 +108,15 @@ func (p Pipeline) getSources(sources []ActionSource) ([]Source, error) {
 
 func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Output, error) {
 	switch act.Type {
-	case Download:
+	case YoutubeDownload:
 		return p.runDownload(ctx, act)
-	case CutVideo:
+	case VideoCut:
 		return p.runCutVideo(ctx, act)
-	case ExtractAudio:
+	case VideoExtractAudio:
 		return p.runExtractAudio(ctx, act)
 	case AudioNormalize:
 		return p.runAudioNormalize(ctx, act)
-	case MergeVideo:
+	case VideoMerge:
 		return p.runMergeVideo(ctx, act)
 	default:
 		return files.Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
