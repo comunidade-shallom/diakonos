@@ -10,8 +10,8 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pterm/pterm v0.12.42
 	github.com/u2takey/ffmpeg-go v0.4.1
-	github.com/urfave/cli/v2 v2.10.2
-	golang.org/x/net v0.0.0-20220617184016-355a448f1bc9
+	github.com/urfave/cli/v2 v2.10.3
+	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e
 	gopkg.in/yaml.v3 v3.0.1
 )
 
