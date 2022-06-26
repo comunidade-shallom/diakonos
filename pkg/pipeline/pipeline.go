@@ -20,10 +20,11 @@ type (
 )
 
 const (
-	Download     Action = "download"
-	CutVideo     Action = "cut-video"
-	ExtractAudio Action = "extract-audio"
-	MergeVideo   Action = "merge-video"
+	Download       Action = "youtube-download"
+	CutVideo       Action = "video-cut"
+	ExtractAudio   Action = "video-extract-audio"
+	MergeVideo     Action = "video-merge"
+	AudioNormalize Action = "audio-normalize"
 )
 
 var (
@@ -113,6 +114,8 @@ func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Ou
 		return p.runCutVideo(ctx, act)
 	case ExtractAudio:
 		return p.runExtractAudio(ctx, act)
+	case AudioNormalize:
+		return p.runAudioNormalize(ctx, act)
 	case MergeVideo:
 		return p.runMergeVideo(ctx, act)
 	default:
