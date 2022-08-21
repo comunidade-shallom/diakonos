@@ -1,6 +1,7 @@
 package merge
 
 import (
+	"context"
 	"os"
 
 	"github.com/comunidade-shallom/diakonos/pkg/files"
@@ -11,7 +12,7 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DM:001")
 
-func Files(options Params) (files.Output, error) {
+func Files(_ context.Context, options Params) (files.Output, error) {
 	out := files.Output{
 		Filename: options.Filename(),
 	}

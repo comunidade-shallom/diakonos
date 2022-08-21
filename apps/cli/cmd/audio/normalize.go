@@ -36,7 +36,7 @@ var CmdNormalize = &cli.Command{
 			return err
 		}
 
-		file, err := audios.Normalize(params)
+		file, err := audios.Normalize(ctx.Context, params)
 
 		if err == nil {
 			pterm.Success.Printfln("Done: %s", file.NameRelative())

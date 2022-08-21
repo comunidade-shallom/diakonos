@@ -27,5 +27,5 @@ func (p Pipeline) runMergeVideo(ctx context.Context, act ActionDefinition) (file
 		return files.Output{}, err
 	}
 
-	return merge.Files(params)
+	return merge.Files(ctx, params)
 }

@@ -20,5 +20,5 @@ func (p Pipeline) runCutVideo(ctx context.Context, act ActionDefinition) (files.
 
 	params.Source = source.Value
 
-	return cut.Video(params)
+	return cut.Video(ctx, params)
 }

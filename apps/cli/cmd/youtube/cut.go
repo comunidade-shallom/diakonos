@@ -72,7 +72,7 @@ var CmdCut = &cli.Command{
 			return err
 		}
 
-		croppedFile, err := cut.Video(cutParams)
+		croppedFile, err := cut.Video(ctx.Context, cutParams)
 		if err != nil {
 			return err
 		}
@@ -87,7 +87,7 @@ var CmdCut = &cli.Command{
 				return err
 			}
 
-			audioFile, err := audios.Extract(extractParams)
+			audioFile, err := audios.Extract(ctx.Context, extractParams)
 			if err != nil {
 				return err
 			}

@@ -1,6 +1,7 @@
 package cut
 
 import (
+	"context"
 	"fmt"
 	"path"
 
@@ -12,7 +13,7 @@ import (
 
 var ErrExist = errors.Business("file already exist (%s)", "DC:001")
 
-func Video(options Params) (files.Output, error) {
+func Video(_ context.Context, options Params) (files.Output, error) {
 	out := files.Output{
 		Filename: options.Filename(),
 	}

@@ -35,7 +35,7 @@ var CmdMerge = &cli.Command{
 			return err
 		}
 
-		out, err := merge.Files(params)
+		out, err := merge.Files(ctx.Context, params)
 
 		if err == nil {
 			pterm.Success.Printfln("Done: %s", out.NameRelative())

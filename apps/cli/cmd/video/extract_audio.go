@@ -38,7 +38,7 @@ var CmdExtractAudio = &cli.Command{
 			return err
 		}
 
-		file, err := audios.Extract(params)
+		file, err := audios.Extract(ctx.Context, params)
 
 		if err == nil {
 			pterm.Success.Printfln("Done: %s", file.NameRelative())

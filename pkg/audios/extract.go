@@ -1,6 +1,8 @@
 package audios
 
 import (
+	"context"
+
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/pterm/pterm"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
@@ -8,7 +10,7 @@ import (
 
 const bitrate = 192000
 
-func Extract(params Params) (files.Output, error) {
+func Extract(_ context.Context, params Params) (files.Output, error) {
 	out := files.Output{
 		Filename: params.Filename(),
 	}

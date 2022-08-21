@@ -1,12 +1,14 @@
 package audios
 
 import (
+	"context"
+
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/pterm/pterm"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func Normalize(params Params) (files.Output, error) {
+func Normalize(_ context.Context, params Params) (files.Output, error) {
 	out := files.Output{
 		Filename: params.WithPrefix("normalized-"),
 	}

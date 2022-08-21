@@ -20,5 +20,5 @@ func (p Pipeline) runExtractAudio(ctx context.Context, act ActionDefinition) (fi
 
 	params.Source = source.Value
 
-	return audios.Extract(params)
+	return audios.Extract(ctx, params)
 }

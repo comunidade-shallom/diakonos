@@ -20,5 +20,5 @@ func (p Pipeline) runAudioNormalize(ctx context.Context, act ActionDefinition) (
 
 	params.Source = source.Value
 
-	return audios.Normalize(params)
+	return audios.Normalize(ctx, params)
 }
