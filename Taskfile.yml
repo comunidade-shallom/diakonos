@@ -20,31 +20,61 @@ tasks:
     desc: Install dependencies
     cmds:
       - go get ./...
+      - go mod tidy
       - go mod vendor
+
+  install:lint:
+    desc: Install dependencies
+    status:
+      - test -f $(go env GOPATH)/bin/golangci-lint
+    cmds:
+      - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+
+  install:gofumpt:
+    desc: Install dependencies
+    status:
+      - test -f $(go env GOPATH)/bin/gofumpt
+    cmds:
+      - go install mvdan.cc/gofumpt@latest
 
   setup:
     desc: Setup project dependencies
     deps:
       - install
-    cmds:
-      - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+      - install:lint
+      - install:gofumpt
 
-  run:cli:
-    desc: Run CLI
+  generate:
     cmds:
-      - go run ./apps/cli/ {{.CLI_ARGS}}
+      - go generate ./...
 
-  check:
+  format:
     desc: Check source code
     cmds:
       - go fmt ./...
+
+  vet:
+    desc: Check source code
+    cmds:
       - go vet ./...
-      - golangci-lint run ./...
+
+  check:
+    desc: Check source code
+    deps:
+      - format
+      - vet
+    cmds:
+      - golangci-lint run ./... {{.CLI_ARGS}}
 
   clean:
     desc: Remove old binaries
     cmds:
       - rm -rf {{.DIR_DIST}}/{{.APP_BASE_NAME}}-*
+
+  run:cli:
+    desc: Run CLI
+    cmds:
+      - go run ./apps/cli/ {{.CLI_ARGS}}
 
   build:
     desc: Build CLI (linux by default)
