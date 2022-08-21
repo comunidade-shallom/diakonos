@@ -1,7 +1,6 @@
 package pipeline
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -29,7 +28,7 @@ var Cmd = &cli.Command{
 			source = path.Join(pwd, source)
 		}
 
-		content, err := ioutil.ReadFile(source)
+		content, err := os.ReadFile(source)
 		if err != nil {
 			return err
 		}
