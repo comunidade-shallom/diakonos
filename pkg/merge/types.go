@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -54,7 +53,7 @@ func (p Params) Filename() string {
 }
 
 func (p Params) tempFile() (*os.File, error) {
-	file, err := ioutil.TempFile(p.OutputDir, "videos-to-merge.*.txt")
+	file, err := os.CreateTemp(p.OutputDir, "videos-to-merge.*.txt")
 	if err != nil {
 		return nil, err
 	}
