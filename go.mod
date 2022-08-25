@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/bogem/id3v2/v2 v2.1.2
 	github.com/creasty/defaults v1.6.0
+	github.com/dhowden/tag v0.0.0-20220618230019-adf36e896086
 	github.com/gosimple/slug v1.12.0
 	github.com/kkdai/youtube/v2 v2.7.15
 	github.com/kkyr/fig v0.3.0

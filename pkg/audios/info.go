@@ -2,116 +2,58 @@ package audios
 
 import (
 	"context"
-	"fmt"
+	"os"
 
-	"github.com/bogem/id3v2/v2"
+	"github.com/dhowden/tag"
 )
 
 type AudioTags struct {
 	Title   string
 	Artist  string
 	Album   string
-	Year    string
+	Year    int
 	URL     string
 	Comment string
 }
 
 func Info(_ context.Context, source string) (AudioTags, error) {
-	tag, err := id3v2.Open(source, id3v2.Options{Parse: true})
+	file, err := os.Open(source)
 	if err != nil {
 		return AudioTags{}, err
 	}
 
-	defer tag.Close()
+	defer file.Close()
 
-	frames := tag.AllFrames()
-
-	for key, values := range frames {
-		fmt.Println(". " + key)
-
-		for _, frame := range values {
-			ud, ok := frame.(id3v2.UserDefinedTextFrame)
-
-			if ok {
-				fmt.Println(".. " + ud.Description)
-				fmt.Println(".. " + ud.Value)
-
-				continue
-			}
-
-			tx, ok := frame.(id3v2.TextFrame)
-
-			if ok {
-				fmt.Println(".. " + tx.Text)
-
-				continue
-			}
-
-			pic, ok := frame.(id3v2.PictureFrame)
-
-			if ok {
-				fmt.Println(".. " + pic.Description)
-				fmt.Println(".. " + pic.MimeType)
-
-				continue
-			}
-
-			cm, ok := frame.(id3v2.CommentFrame)
-
-			if ok {
-				fmt.Println(".. " + cm.Description)
-				fmt.Println(".. " + cm.Text)
-
-				continue
-			}
-
-			id, ok := frame.(id3v2.UFIDFrame)
-
-			if ok {
-				fmt.Println(".. " + id.OwnerIdentifier)
-				fmt.Println(".. " + id.UniqueIdentifier())
-				fmt.Println(".. " + string(id.Identifier))
-
-				continue
-			}
-
-			cp, ok := frame.(id3v2.ChapterFrame)
-
-			if ok {
-				fmt.Println(".. " + cp.ElementID)
-				fmt.Println(".. " + cp.Title.Text)
-				fmt.Println(".. " + cp.Description.Text)
-				fmt.Println(".. " + cp.UniqueIdentifier())
-
-				continue
-			}
-
-			fmt.Println(".. Unknow")
-		}
-
-		fmt.Println("...")
+	meta, err := tag.ReadFrom(file)
+	if err != nil {
+		return AudioTags{}, err
 	}
 
 	return AudioTags{
-		Title:  tag.Title(),
-		Artist: tag.Artist(),
-		Album:  tag.Album(),
-		Year:   tag.Year(),
-		// URL:     tag.GetTextFrame("WXXX").Text,
-		Comment: getComment(tag),
-	}, err
+		Title:   meta.Title(),
+		Artist:  meta.Artist(),
+		Album:   meta.Album(),
+		Year:    meta.Year(),
+		Comment: meta.Comment(),
+		URL:     getURL(meta),
+	}, nil
 }
 
-func getComment(tag *id3v2.Tag) string {
-	comments := tag.GetFrames(tag.CommonID("Comments"))
-	if len(comments) > 0 {
-		cm, ok := comments[0].(id3v2.CommentFrame)
+func getURL(meta tag.Metadata) string {
+	raw := meta.Raw()
+
+	for _, k := range []string{"WXXX", "WXX"} {
+		url, ok := raw[k]
 
 		if ok {
-			return cm.Text
-		}
+			val, ok := url.(*tag.Comm)
 
-		return ""
+			if ok {
+				return val.Text
+			}
+
+			return ""
+		}
 	}
 
 	return ""
