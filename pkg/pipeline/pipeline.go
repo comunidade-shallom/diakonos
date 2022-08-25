@@ -25,6 +25,7 @@ const (
 	VideoExtractAudio Action = "video-extract-audio"
 	VideoMerge        Action = "video-merge"
 	AudioNormalize    Action = "audio-normalize"
+	AudioDefineTags   Action = "audio-define-tags"
 )
 
 var (
@@ -118,6 +119,8 @@ func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Ou
 		return p.runAudioNormalize(ctx, act)
 	case VideoMerge:
 		return p.runMergeVideo(ctx, act)
+	case AudioDefineTags:
+		return p.runDefineAudioTags(ctx, act)
 	default:
 		return files.Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
 	}
