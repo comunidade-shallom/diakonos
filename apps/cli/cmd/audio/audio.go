@@ -7,5 +7,5 @@ import (
 var Cmd = &cli.Command{
 	Name:        "audio",
 	Usage:       "Interact with audio files",
-	Subcommands: []*cli.Command{CmdNormalize},
+	Subcommands: []*cli.Command{CmdNormalize, CmdInfo},
 }
