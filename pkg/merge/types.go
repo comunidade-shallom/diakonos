@@ -11,7 +11,7 @@ import (
 )
 
 type Config struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/merges"`
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"merges"`
 }
 
 type Params struct {

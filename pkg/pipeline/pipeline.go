@@ -2,10 +2,13 @@ package pipeline
 
 import (
 	"context"
+	"path"
 
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/files"
+	"github.com/comunidade-shallom/diakonos/pkg/support"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
+	"github.com/gosimple/slug"
 	"github.com/pterm/pterm"
 )
 
@@ -36,7 +39,14 @@ var (
 )
 
 func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]files.Output, error) {
-	p.cfg = cfg
+	target := path.Join(cfg.BaseOutputDir, "pipelines", slug.Make(p.Name))
+
+	err := support.EnsureDir(target)
+	if err != nil {
+		return nil, err
+	}
+
+	p.cfg = cfg.WithOutput(target)
 
 	p.outputs = make(map[string]files.Output)
 

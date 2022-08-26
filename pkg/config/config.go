@@ -12,10 +12,11 @@ import (
 type ctxKey struct{}
 
 type AppConfig struct {
-	Download download.Config
-	Cut      cut.Config
-	Audio    audios.Config
-	Merge    merge.Config
+	BaseOutputDir string `fig:"base_output_dir" yaml:"base_output_dir" default:"outputs"`
+	Download      download.Config
+	Cut           cut.Config
+	Audio         audios.Config
+	Merge         merge.Config
 }
 
 func Ctx(ctx context.Context) AppConfig {
@@ -32,4 +33,13 @@ func (c AppConfig) WithContext(ctx context.Context) context.Context {
 	}
 
 	return context.WithValue(ctx, ctxKey{}, c)
+}
+
+func (c AppConfig) WithOutput(dir string) AppConfig {
+	c.Download.OutputDir = dir
+	c.Cut.OutputDir = dir
+	c.Audio.OutputDir = dir
+	c.Merge.OutputDir = dir
+
+	return c
 }

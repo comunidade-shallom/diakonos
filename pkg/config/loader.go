@@ -71,13 +71,23 @@ func Load(file string) (AppConfig, error) {
 func applyDefaults(cfg AppConfig) (AppConfig, error) {
 	pwd, _ := os.Getwd()
 
+	if cfg.BaseOutputDir == "" {
+		cfg.BaseOutputDir = path.Join(pwd, "outputs")
+	}
+
+	if !path.IsAbs(cfg.BaseOutputDir) {
+		cfg.BaseOutputDir = path.Join(pwd, cfg.BaseOutputDir)
+	}
+
+	base := cfg.BaseOutputDir
+
 	// download
 	if cfg.Download.OutputDir == "" {
-		cfg.Download.OutputDir = path.Join(pwd, "outputs/downloads")
+		cfg.Download.OutputDir = path.Join(base, "downloads")
 	}
 
 	if !path.IsAbs(cfg.Download.OutputDir) {
-		cfg.Download.OutputDir = path.Join(pwd, cfg.Download.OutputDir)
+		cfg.Download.OutputDir = path.Join(base, cfg.Download.OutputDir)
 	}
 
 	if cfg.Download.MimeType == "" {
@@ -90,29 +100,29 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 
 	// cut
 	if cfg.Cut.OutputDir == "" {
-		cfg.Cut.OutputDir = path.Join(pwd, "outputs/cuts")
+		cfg.Cut.OutputDir = path.Join(base, "cuts")
 	}
 
 	if !path.IsAbs(cfg.Cut.OutputDir) {
-		cfg.Cut.OutputDir = path.Join(pwd, cfg.Cut.OutputDir)
+		cfg.Cut.OutputDir = path.Join(base, cfg.Cut.OutputDir)
 	}
 
 	// audios
 	if cfg.Audio.OutputDir == "" {
-		cfg.Audio.OutputDir = path.Join(pwd, "outputs/audios")
+		cfg.Audio.OutputDir = path.Join(base, "audios")
 	}
 
 	if !path.IsAbs(cfg.Audio.OutputDir) {
-		cfg.Audio.OutputDir = path.Join(pwd, cfg.Audio.OutputDir)
+		cfg.Audio.OutputDir = path.Join(base, cfg.Audio.OutputDir)
 	}
 
 	// merged
 	if cfg.Merge.OutputDir == "" {
-		cfg.Merge.OutputDir = path.Join(pwd, "outputs/merges")
+		cfg.Merge.OutputDir = path.Join(base, "merges")
 	}
 
 	if !path.IsAbs(cfg.Merge.OutputDir) {
-		cfg.Merge.OutputDir = path.Join(pwd, cfg.Merge.OutputDir)
+		cfg.Merge.OutputDir = path.Join(base, cfg.Merge.OutputDir)
 	}
 
 	return cfg, nil

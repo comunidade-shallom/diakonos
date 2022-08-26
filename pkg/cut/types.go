@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/cuts"`
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"cuts"`
 }
 
 type Params struct {

@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"outputs/audios"`
+	OutputDir string `fig:"output_dir" yaml:"output_dir" default:"audios"`
 }
 
 type Params struct {
