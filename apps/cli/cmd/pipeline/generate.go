@@ -8,7 +8,6 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/pipeline"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/urfave/cli/v2"
-	"gopkg.in/yaml.v3"
 )
 
 var ErrorMissingSourceArgument = errors.Business("Missing 'source' param", "DP:001")
@@ -33,10 +32,7 @@ var Cmd = &cli.Command{
 			return err
 		}
 
-		var collection pipeline.Pipeline
-
-		err = yaml.Unmarshal(content, &collection)
-
+		collection, err := pipeline.Parse(content)
 		if err != nil {
 			return err
 		}

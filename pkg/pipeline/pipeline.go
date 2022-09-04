@@ -7,6 +7,7 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/config"
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support"
+	"github.com/comunidade-shallom/diakonos/pkg/support/collection"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/gosimple/slug"
 	"github.com/pterm/pterm"
@@ -15,8 +16,10 @@ import (
 type (
 	Action   string
 	Pipeline struct {
-		Name    string             `yml:"name"`
-		Actions []ActionDefinition `yml:"actions"`
+		Name    string                       `yml:"name"`
+		Data    collection.Params            `yml:"data"`
+		Values  map[string]collection.Params `yml:"values"`
+		Actions []ActionDefinition           `yml:"actions"`
 		outputs map[string]files.Output
 		cfg     config.AppConfig
 	}
