@@ -5,12 +5,13 @@ import (
 
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/merge"
+	"github.com/comunidade-shallom/diakonos/pkg/support/collection"
 )
 
-func (p Pipeline) runMergeVideo(ctx context.Context, act ActionDefinition) (files.Output, error) {
+func (p Pipeline) runMergeVideo(ctx context.Context, act ActionDefinition) (files.Output, collection.Params, error) {
 	sources, err := p.getSources(act.Sources)
 	if err != nil {
-		return files.Output{}, err
+		return files.Output{}, collection.Params{}, err
 	}
 
 	srcs := make([]string, len(sources))
@@ -24,8 +25,10 @@ func (p Pipeline) runMergeVideo(ctx context.Context, act ActionDefinition) (file
 		Name:    act.Params.String("name"),
 	})
 	if err != nil {
-		return files.Output{}, err
+		return files.Output{}, collection.Params{}, err
 	}
 
-	return merge.Files(ctx, params)
+	out, err := merge.Files(ctx, params)
+
+	return out, collection.Params{}, err
 }

@@ -2,6 +2,7 @@ package pipeline
 
 import (
 	"context"
+	"fmt"
 	"path"
 
 	"github.com/comunidade-shallom/diakonos/pkg/config"
@@ -52,13 +53,14 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]fi
 	p.cfg = cfg.WithOutput(target)
 
 	p.outputs = make(map[string]files.Output)
+	p.Values = make(map[string]collection.Params)
 
 	pterm.Info.Printfln("Starting pipeline: %s", p.Name)
 
 	for _, act := range p.Actions {
 		pterm.Debug.Printfln("Running %s", act.ID)
 
-		out, err := p.runAction(ctx, act)
+		out, values, err := p.runAction(ctx, act)
 		if err != nil {
 			pterm.Warning.Printfln("Finish pipeline with error: %s", err.Error())
 
@@ -71,6 +73,17 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]fi
 			pterm.Warning.Printf("Missing action id (%s)", act.Type)
 		} else {
 			p.outputs[act.ID] = out
+			p.Values[act.ID] = values
+		}
+
+		if pterm.Debug.Debugger && len(values) > 0 {
+			data := pterm.TableData{}
+
+			for k, v := range values {
+				data = append(data, []string{k, fmt.Sprintf("%v", v)})
+			}
+
+			_ = pterm.DefaultTable.WithData(data).Render()
 		}
 	}
 
@@ -120,7 +133,7 @@ func (p Pipeline) getSources(sources []ActionSource) ([]Source, error) {
 	return list, nil
 }
 
-func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Output, error) {
+func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Output, collection.Params, error) {
 	switch act.Type {
 	case YoutubeDownload:
 		return p.runDownload(ctx, act)
@@ -135,6 +148,6 @@ func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Ou
 	case AudioDefineTags:
 		return p.runDefineAudioTags(ctx, act)
 	default:
-		return files.Output{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
+		return files.Output{}, collection.Params{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
 	}
 }
