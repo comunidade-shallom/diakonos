@@ -6,6 +6,7 @@ require (
 	github.com/bogem/id3v2/v2 v2.1.2
 	github.com/creasty/defaults v1.6.0
 	github.com/dhowden/tag v0.0.0-20220618230019-adf36e896086
+	github.com/disintegration/imaging v1.6.2
 	github.com/gosimple/slug v1.12.0
 	github.com/kkdai/youtube/v2 v2.7.15
 	github.com/kkyr/fig v0.3.0
@@ -13,7 +14,9 @@ require (
 	github.com/pterm/pterm v0.12.45
 	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/urfave/cli/v2 v2.11.2
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8
 	golang.org/x/net v0.0.0-20220812174116-3211cb980234
+	gopkg.in/fogleman/gg.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -29,6 +32,7 @@ require (
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/dop251/goja v0.0.0-20220815083517-0c74f9139fd6 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/gookit/color v1.5.1 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect

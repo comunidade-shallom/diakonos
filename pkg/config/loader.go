@@ -67,7 +67,7 @@ func Load(file string) (AppConfig, error) {
 	return applyDefaults(cfg)
 }
 
-//nolint:cyclop
+//nolint:cyclop,funlen
 func applyDefaults(cfg AppConfig) (AppConfig, error) {
 	pwd, _ := os.Getwd()
 
@@ -123,6 +123,27 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 
 	if !path.IsAbs(cfg.Merge.OutputDir) {
 		cfg.Merge.OutputDir = path.Join(base, cfg.Merge.OutputDir)
+	}
+
+	// sources
+	if cfg.Sources.Covers == "" {
+		cfg.Sources.Covers = path.Join(pwd, "sources/covers")
+	}
+
+	if !path.IsAbs(cfg.Sources.Covers) {
+		cfg.Sources.Covers = path.Join(pwd, cfg.Sources.Covers)
+	}
+
+	if cfg.Sources.Fonts == "" {
+		cfg.Sources.Fonts = path.Join(pwd, "sources/fonts")
+	}
+
+	if !path.IsAbs(cfg.Sources.Fonts) {
+		cfg.Sources.Fonts = path.Join(pwd, cfg.Sources.Fonts)
+	}
+
+	if cfg.Sources.Footer != "" && !path.IsAbs(cfg.Sources.Footer) {
+		cfg.Sources.Footer = path.Join(pwd, cfg.Sources.Footer)
 	}
 
 	return cfg, nil

@@ -7,6 +7,7 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 	"github.com/comunidade-shallom/diakonos/pkg/merge"
+	"github.com/comunidade-shallom/diakonos/pkg/sources"
 )
 
 type ctxKey struct{}
@@ -17,6 +18,7 @@ type AppConfig struct {
 	Cut           cut.Config
 	Audio         audios.Config
 	Merge         merge.Config
+	Sources       sources.Sources
 }
 
 func Ctx(ctx context.Context) AppConfig {

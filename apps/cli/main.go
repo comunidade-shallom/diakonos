@@ -36,7 +36,7 @@ func main() {
 				Usage: "Enable debug mode",
 			},
 		},
-		Commands: []*cli.Command{youtube.Cmd, video.Cmd, pipeline.Cmd, cmd.CmdConfig, audio.Cmd},
+		Commands: []*cli.Command{youtube.Cmd, video.Cmd, pipeline.Cmd, cmd.CmdConfig, cmd.CmdCover, audio.Cmd},
 		Before: func(ctx *cli.Context) error {
 			pterm.Debug.Debugger = !ctx.Bool("debug")
 
