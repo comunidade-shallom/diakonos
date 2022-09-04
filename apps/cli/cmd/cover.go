@@ -10,10 +10,14 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/covers"
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support"
+	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
+	"github.com/gosimple/slug"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/fogleman/gg.v1"
 )
+
+var ErrFailToGenerateImage = errors.System(nil, "Fail to generate image", "C:001")
 
 var CmdCover = &cli.Command{
 	Name:  "cover",
@@ -39,15 +43,17 @@ var CmdCover = &cli.Command{
 			Value:       5,
 		},
 		&cli.StringFlag{
-			Name:        "out_dir",
-			DefaultText: "covers/" + time.Now().Format("20060201"),
-			Value:       "covers/" + time.Now().Format("20060201"),
+			Name: "out_dir",
 		},
 	},
 	Action: func(cmd *cli.Context) error {
 		cfg := config.Ctx(cmd.Context)
-
+		text := cmd.String("text")
 		outDir := cmd.String("out_dir")
+
+		if outDir == "" {
+			outDir = "covers/" + slug.Make(text)
+		}
 
 		if !filepath.IsAbs(outDir) {
 			outDir = filepath.Join(cfg.BaseOutputDir, outDir)
@@ -60,29 +66,39 @@ var CmdCover = &cli.Command{
 		prefix := cmd.String("prefix")
 		times := cmd.Int("times")
 
-		fmt.Printf("outDir: %v\n", outDir)
-		fmt.Printf("prefix: %v\n", prefix)
-		fmt.Printf("times: %v\n", times)
+		progressBar, err := pterm.DefaultProgressbar.
+			WithTotal(times).
+			WithTitle("Generating covers").
+			WithRemoveWhenDone().
+			Start()
+		if err != nil {
+			return err
+		}
 
-		for i := 0; i < times; i++ {
-			img, err := covers.Generator{
-				Sources: cfg.Sources,
-				Size:    cmd.Int("size"),
-				Text:    cmd.String("text"),
-			}.Generate()
+		generator := covers.Generator{
+			Sources: cfg.Sources,
+			Size:    cmd.Int("size"),
+			Text:    text,
+		}
+
+		for count := 0; count < times; count++ {
+			name := filepath.Join(outDir, fmt.Sprintf("%s (%03d).png", prefix, count+1))
+			progressBar.UpdateTitle("Generating " + files.GetRelative(name))
+
+			img, err := generator.Generate()
 			if err != nil {
 				return err
 			}
-
-			name := filepath.Join(outDir, fmt.Sprintf("%s (%v).png", prefix, i))
 
 			err = gg.SavePNG(name, img)
 
 			if err != nil {
-				return err
+				return ErrFailToGenerateImage.WithErr(err)
 			}
 
 			pterm.Success.Printfln("Generated: %s", files.GetRelative(name))
+
+			progressBar.Increment()
 		}
 
 		return nil

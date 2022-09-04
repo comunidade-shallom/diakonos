@@ -7,11 +7,16 @@ import (
 	"math/big"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/disintegration/imaging"
+	"github.com/pterm/pterm"
 	"golang.org/x/image/font"
 	"gopkg.in/fogleman/gg.v1"
 )
+
+var cache map[string][]string = map[string][]string{}
 
 type Sources struct {
 	Footer string `fig:"footer" yaml:"footer" default:"sources/footer.png"`
@@ -49,6 +54,8 @@ func (s Sources) OpenRandomFont(points float64) (font.Face, error) {
 		return nil, err
 	}
 
+	pterm.Debug.Printfln("Load font: %s", files.GetRelative(src))
+
 	return gg.LoadFontFace(src, points)
 }
 
@@ -58,11 +65,13 @@ func (s Sources) OpenRandomCover() (image.Image, error) {
 		return nil, err
 	}
 
+	pterm.Debug.Printfln("Load image: %s", files.GetRelative(src))
+
 	return imaging.Open(src)
 }
 
 func randomFile(base string) (string, error) {
-	list, err := os.ReadDir(base)
+	list, err := listFiles(base)
 	if err != nil {
 		return "", err
 	}
@@ -72,19 +81,30 @@ func randomFile(base string) (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(base, list[nBig.Int64()].Name()), nil
+	return list[nBig.Int64()], nil
 }
 
 func listFiles(base string) ([]string, error) {
+	if cached, has := cache[base]; has {
+		return cached, nil
+	}
+
 	list, err := os.ReadDir(base)
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]string, len(list))
+	res := make([]string, 0)
 
-	for i, de := range list {
-		res[i] = filepath.Join(base, de.Name())
+	for _, de := range list {
+		name := de.Name()
+
+		// ignore dotfiles
+		if strings.HasPrefix(name, ".") {
+			continue
+		}
+
+		res = append(res, filepath.Join(base, name))
 	}
 
 	return res, nil
