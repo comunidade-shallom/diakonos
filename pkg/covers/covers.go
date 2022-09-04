@@ -21,14 +21,13 @@ type Generator struct {
 
 func (g Generator) Generate() (image.Image, error) {
 	dc := gg.NewContext(g.Size, g.Size)
-	err := g.addBackgroundImage(dc)
-	if err != nil {
+	if err := g.addBackgroundImage(dc); err != nil {
 		return nil, err
 	}
 
 	g.addBox(dc)
 
-	err = g.addFooter(dc)
+	err := g.addFooter(dc)
 	if err != nil {
 		return nil, err
 	}
@@ -55,13 +54,13 @@ func (g Generator) addBackgroundImage(dc *gg.Context) error {
 		return err
 	}
 
-	backgroundImage := imaging.Fill(
+	backgroundImage := MaybeApplyFilters(imaging.Fill(
 		backgroundFilename,
 		dc.Width(),
 		dc.Height(),
 		imaging.Center,
 		imaging.Lanczos,
-	)
+	))
 
 	dc.DrawImage(backgroundImage, 0, 0)
 
@@ -128,7 +127,6 @@ func (g Generator) addFooter(dc *gg.Context) error {
 }
 
 func (g Generator) addMainText(dc *gg.Context) error {
-	//nolint:
 	fontFace, err := g.Sources.OpenRandomFont(130)
 	if err != nil {
 		return err
