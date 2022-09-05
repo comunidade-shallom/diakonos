@@ -22,7 +22,7 @@ var ErrFailToGenerateImage = errors.System(nil, "Fail to generate image", "C:001
 
 var CmdCover = &cli.Command{
 	Name:  "cover",
-	Usage: "generate cover",
+	Usage: "generate covers",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "text",
@@ -42,6 +42,11 @@ var CmdCover = &cli.Command{
 			Name:        "times",
 			DefaultText: "5",
 			Value:       5,
+		},
+		&cli.Float64Flag{
+			Name:        "font-size",
+			DefaultText: "130",
+			Value:       130,
 		},
 		&cli.StringFlag{
 			Name: "out_dir",
@@ -77,9 +82,10 @@ var CmdCover = &cli.Command{
 		}
 
 		generator := covers.Generator{
-			Sources: cfg.Sources,
-			Size:    cmd.Int("size"),
-			Text:    text,
+			Sources:  cfg.Sources,
+			Size:     cmd.Int("size"),
+			FontSize: cmd.Float64("font-size"),
+			Text:     text,
 		}
 
 		for count := 0; count < times; count++ {

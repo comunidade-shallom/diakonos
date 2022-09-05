@@ -15,8 +15,9 @@ const boxMargin = 20.0
 
 type Generator struct {
 	Sources   sources.Sources
-	FooterSRC string
 	Size      int
+	FontSize  float64
+	FooterSRC string
 	Text      string
 }
 
@@ -153,7 +154,12 @@ func (g Generator) addFooter(dc *gg.Context, boxColor color.Color) error {
 }
 
 func (g Generator) addMainText(dc *gg.Context, boxColor color.Color) error {
-	fontFace, err := g.Sources.OpenRandomFont(130)
+	fontSize := g.FontSize
+	if fontSize == 0 {
+		fontSize = 130
+	}
+
+	fontFace, err := g.Sources.OpenRandomFont(fontSize)
 	if err != nil {
 		return err
 	}
