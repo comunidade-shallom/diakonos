@@ -25,7 +25,9 @@ type Sources struct {
 	Fonts  string `fig:"fonts" yaml:"fonts" default:"sources/fonts"`
 	Covers string `fig:"covers" yaml:"covers" default:"sources/covers"`
 	// https://colors.muz.li/palette/976f4e/4e7197/374f6a/978a4e/6a6137
-	Colors []string `fig:"colors" yaml:"colors" default:"[#000000,#976f4e,#4e7197,#374f6a,#978a4e,#6a6137]"`
+	// https://colors.muz.li/palette/24180f/0f1c24/0a1419/24200f/19160a
+	//nolint:lll
+	Colors []string `fig:"colors" yaml:"colors" default:"[#000000,#976f4e,#4e7197,#374f6a,#978a4e,#6a6137,#24180f,#0f1c24,#0a1419,#24200f,#19160a]"`
 }
 
 func (s Sources) ListFonts() ([]string, error) {
