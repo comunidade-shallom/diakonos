@@ -25,6 +25,7 @@ func Normalize(_ context.Context, params Params) (files.Output, error) {
 		Filter("loudnorm", ffmpeg.Args{
 			// "I=-16:TP=-1.5:LRA=11",
 		}).
+		//nolint:contextcheck
 		Output(out.Filename).
 		Run()
 

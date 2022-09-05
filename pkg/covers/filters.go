@@ -12,7 +12,7 @@ import (
 
 type Filter func(source image.Image) image.Image
 
-var filters map[string]Filter = map[string]Filter{
+var filters = map[string]Filter{
 	"Blur":        ApplyBlur,
 	"AdjustGamma": ApplyAdjustGamma,
 	"Sharpen":     ApplySharpen,

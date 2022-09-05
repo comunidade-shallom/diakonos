@@ -31,6 +31,7 @@ func Video(_ context.Context, options Params) (files.Output, error) {
 
 	err := ffmpeg.
 		Input(options.Source).
+		//nolint:contextcheck
 		Output(out.Filename, ffmpeg.KwArgs{
 			"ss":  fmt.Sprintf("%f", options.Start.Seconds()),
 			"to":  fmt.Sprintf("%f", options.Finish.Seconds()),

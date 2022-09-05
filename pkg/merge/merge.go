@@ -34,6 +34,7 @@ func Files(_ context.Context, options Params) (files.Output, error) {
 
 	err = ffmpeg.
 		Input(tmp.Name(), ffmpeg.KwArgs{"f": "concat", "safe": "0"}).
+		//nolint:contextcheck
 		Output(out.Filename, ffmpeg.KwArgs{"c": "copy"}).
 		Run()
 

@@ -20,6 +20,7 @@ func YouTube(ctx context.Context, params Params) (files.Output, *youtube.Video, 
 
 	client := youtubeClient(params.OutputDir)
 
+	//nolint:contextcheck
 	video, err := client.GetVideo(params.Source)
 	if err != nil {
 		return out, video, err
