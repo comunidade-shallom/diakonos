@@ -28,6 +28,9 @@ var CmdCover = &cli.Command{
 			Name:     "text",
 			Required: true,
 		},
+		&cli.StringFlag{
+			Name: "sizes",
+		},
 		&cli.IntFlag{
 			Name:        "width",
 			DefaultText: "1080",
@@ -63,6 +66,14 @@ var CmdCover = &cli.Command{
 		outDir := cmd.String("out_dir")
 		height := cmd.Int("height")
 		width := cmd.Int("width")
+		sizes := covers.ParseSizes(cmd.String("sizes"))
+
+		if len(sizes) == 0 {
+			sizes = append(sizes, covers.Size{
+				Width:  width,
+				Height: height,
+			})
+		}
 
 		if outDir == "" {
 			outDir = "covers/" + slug.Make(text)
@@ -78,9 +89,10 @@ var CmdCover = &cli.Command{
 
 		prefix := cmd.String("prefix")
 		times := cmd.Int("times")
+		total := times * len(sizes)
 
 		progressBar, err := pterm.DefaultProgressbar.
-			WithTotal(times).
+			WithTotal(total).
 			WithTitle("Generating covers").
 			WithRemoveWhenDone().
 			Start()
@@ -97,23 +109,25 @@ var CmdCover = &cli.Command{
 		}
 
 		for count := 0; count < times; count++ {
-			name := filepath.Join(outDir, fmt.Sprintf("%s (%03d).png", prefix, count+1))
-			progressBar.UpdateTitle("Generating " + files.GetRelative(name))
-
 			builder, err := generator.Random()
 			if err != nil {
 				return err
 			}
 
-			err = gg.SavePNG(name, builder.Build())
+			for index, size := range sizes {
+				name := filepath.Join(outDir, fmt.Sprintf("%s-%03d-%03d--%s.png", prefix, count+1, index+1, size.String()))
 
-			if err != nil {
-				return ErrFailToGenerateImage.WithErr(err)
+				progressBar.UpdateTitle("Generating " + files.GetRelative(name))
+
+				err = gg.SavePNG(name, builder.WithSize(size).Build())
+				if err != nil {
+					return ErrFailToGenerateImage.WithErr(err)
+				}
+
+				pterm.Success.Printfln("Generated: %s", files.GetRelative(name))
+				progressBar.Increment()
 			}
 
-			pterm.Success.Printfln("Generated: %s", files.GetRelative(name))
-
-			progressBar.Increment()
 		}
 
 		return nil

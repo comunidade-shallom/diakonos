@@ -58,5 +58,6 @@ func (g GeneratorSource) Random() (Builder, error) {
 		Width:      width,
 		Background: background,
 		Footer:     footer,
+		Filters:    RandomFilters(),
 	}, nil
 }

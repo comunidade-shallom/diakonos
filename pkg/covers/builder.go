@@ -21,6 +21,14 @@ type Builder struct {
 	Font       font.Face
 	Background image.Image
 	Footer     image.Image
+	Filters    []Filter
+}
+
+func (g Builder) WithSize(size Size) Builder {
+	g.Width = size.Width
+	g.Height = size.Height
+
+	return g
 }
 
 func (g Builder) Build() image.Image {
@@ -47,13 +55,13 @@ func (g Builder) addBackground(dc *gg.Context) {
 		return
 	}
 
-	backgroundImage := MaybeApplyFilters(imaging.Fill(
+	backgroundImage := ApplyFilters(imaging.Fill(
 		g.Background,
 		dc.Width(),
 		dc.Height(),
 		imaging.Center,
 		imaging.Lanczos,
-	))
+	), g.Filters)
 
 	dc.DrawImage(backgroundImage, 0, 0)
 }
