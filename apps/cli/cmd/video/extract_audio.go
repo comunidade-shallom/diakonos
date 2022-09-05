@@ -12,6 +12,7 @@ import (
 
 var CmdExtract = &cli.Command{
 	Name:        "extract",
+	Usage:       "Extract audio from a video file",
 	Subcommands: []*cli.Command{CmdExtractAudio},
 }
 
