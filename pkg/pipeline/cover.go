@@ -14,6 +14,7 @@ import (
 	"gopkg.in/fogleman/gg.v1"
 )
 
+//nolint:funlen
 func (p Pipeline) runCoverGenerate(
 	_ context.Context,
 	act ActionDefinition,

@@ -1,4 +1,3 @@
-//nolint:varnamelen,gomnd
 package covers
 
 import (
