@@ -18,6 +18,28 @@ func (p Params) String(key string) string {
 	return ""
 }
 
+func (p Params) Strings(key string) []string {
+	raw, exist := p[key]
+
+	if !exist || raw == nil {
+		return []string{}
+	}
+
+	val, ok := raw.([]interface{})
+
+	if !ok {
+		return []string{}
+	}
+
+	list := make([]string, len(val))
+
+	for index, row := range val {
+		list[index], _ = row.(string)
+	}
+
+	return list
+}
+
 func (p Params) Int(key string) int {
 	raw, exist := p[key]
 

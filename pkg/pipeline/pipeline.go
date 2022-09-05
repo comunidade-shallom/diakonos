@@ -17,12 +17,13 @@ import (
 type (
 	Action   string
 	Pipeline struct {
-		Name    string                       `yml:"name"`
-		Data    collection.Params            `yml:"data"`
-		Values  map[string]collection.Params `yml:"values"`
-		Actions []ActionDefinition           `yml:"actions"`
-		outputs map[string]files.Output
-		cfg     config.AppConfig
+		Name      string                       `yml:"name"`
+		Data      collection.Params            `yml:"data"`
+		Values    map[string]collection.Params `yml:"values"`
+		Actions   []ActionDefinition           `yml:"actions"`
+		outputs   map[string]files.Output
+		cfg       config.AppConfig
+		targetDir string
 	}
 )
 
@@ -33,6 +34,7 @@ const (
 	VideoMerge        Action = "video-merge"
 	AudioNormalize    Action = "audio-normalize"
 	AudioDefineTags   Action = "audio-define-tags"
+	CoverGenerate     Action = "cover-generate"
 )
 
 var (
@@ -51,7 +53,7 @@ func (p *Pipeline) Run(ctx context.Context, cfg config.AppConfig) (map[string]fi
 	}
 
 	p.cfg = cfg.WithOutput(target)
-
+	p.targetDir = target
 	p.outputs = make(map[string]files.Output)
 	p.Values = make(map[string]collection.Params)
 
@@ -147,6 +149,8 @@ func (p Pipeline) runAction(ctx context.Context, act ActionDefinition) (files.Ou
 		return p.runMergeVideo(ctx, act)
 	case AudioDefineTags:
 		return p.runDefineAudioTags(ctx, act)
+	case CoverGenerate:
+		return p.runCoverGenerate(ctx, act)
 	default:
 		return files.Output{}, collection.Params{}, ErrInvalidActionType.Msgf(act.ID, act.Type)
 	}
