@@ -15,7 +15,8 @@ const boxMargin = 20.0
 
 type Builder struct {
 	Text       string
-	Size       int
+	Width      int
+	Height     int
 	Color      color.Color
 	Font       font.Face
 	Background image.Image
@@ -23,7 +24,7 @@ type Builder struct {
 }
 
 func (g Builder) Build() image.Image {
-	dc := gg.NewContext(g.Size, g.Size)
+	dc := gg.NewContext(g.Width, g.Height)
 
 	g.addBackground(dc)
 	g.addBox(dc)

@@ -29,7 +29,12 @@ var CmdCover = &cli.Command{
 			Required: true,
 		},
 		&cli.IntFlag{
-			Name:        "size",
+			Name:        "width",
+			DefaultText: "1080",
+			Value:       1080,
+		},
+		&cli.IntFlag{
+			Name:        "height",
 			DefaultText: "1080",
 			Value:       1080,
 		},
@@ -56,6 +61,8 @@ var CmdCover = &cli.Command{
 		cfg := config.Ctx(cmd.Context)
 		text := cmd.String("text")
 		outDir := cmd.String("out_dir")
+		height := cmd.Int("height")
+		width := cmd.Int("width")
 
 		if outDir == "" {
 			outDir = "covers/" + slug.Make(text)
@@ -83,7 +90,8 @@ var CmdCover = &cli.Command{
 
 		generator := covers.GeneratorSource{
 			Sources:  cfg.Sources,
-			Size:     cmd.Int("size"),
+			Width:    width,
+			Height:   height,
 			FontSize: cmd.Float64("font-size"),
 			Text:     text,
 		}

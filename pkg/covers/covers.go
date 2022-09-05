@@ -7,7 +7,8 @@ import (
 
 type GeneratorSource struct {
 	Sources   sources.Sources
-	Size      int
+	Width     int
+	Height    int
 	FontSize  float64
 	FooterSRC string
 	Text      string
@@ -19,9 +20,14 @@ func (g GeneratorSource) Random() (Builder, error) {
 		fontSize = 130
 	}
 
-	size := g.Size
-	if size == 0 {
-		size = 130
+	width := g.Width
+	if width == 0 {
+		width = 1080
+	}
+
+	height := g.Height
+	if height == 0 {
+		height = width
 	}
 
 	background, err := g.Sources.OpenRandomCover()
@@ -47,8 +53,9 @@ func (g GeneratorSource) Random() (Builder, error) {
 	return Builder{
 		Text:       g.Text,
 		Color:      clor,
-		Size:       size,
 		Font:       font,
+		Height:     height,
+		Width:      width,
 		Background: background,
 		Footer:     footer,
 	}, nil
