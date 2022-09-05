@@ -18,16 +18,15 @@ import (
 	"gopkg.in/fogleman/gg.v1"
 )
 
-var ErrFailToGenerateImage = errors.System(nil, "Fail to generate image", "C:001")
+var (
+	ErrFailToGenerateImage = errors.System(nil, "Fail to generate image", "C:001")
+	ErrMissingText         = errors.Business("Text input must be defined", "C:002")
+)
 
 var CmdCover = &cli.Command{
 	Name:  "cover",
 	Usage: "generate covers",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:     "text",
-			Required: true,
-		},
 		&cli.StringFlag{
 			Name: "sizes",
 		},
@@ -62,11 +61,15 @@ var CmdCover = &cli.Command{
 	},
 	Action: func(cmd *cli.Context) error {
 		cfg := config.Ctx(cmd.Context)
-		text := cmd.String("text")
 		outDir := cmd.String("out_dir")
 		height := cmd.Int("height")
 		width := cmd.Int("width")
 		sizes := covers.ParseSizes(cmd.String("sizes"))
+		text := cmd.Args().First()
+
+		if text == "" {
+			return ErrMissingText
+		}
 
 		if len(sizes) == 0 {
 			sizes = append(sizes, covers.Size{
