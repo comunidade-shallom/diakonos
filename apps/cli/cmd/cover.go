@@ -81,7 +81,7 @@ var CmdCover = &cli.Command{
 			return err
 		}
 
-		generator := covers.Generator{
+		generator := covers.GeneratorSource{
 			Sources:  cfg.Sources,
 			Size:     cmd.Int("size"),
 			FontSize: cmd.Float64("font-size"),
@@ -92,12 +92,12 @@ var CmdCover = &cli.Command{
 			name := filepath.Join(outDir, fmt.Sprintf("%s (%03d).png", prefix, count+1))
 			progressBar.UpdateTitle("Generating " + files.GetRelative(name))
 
-			img, err := generator.Generate()
+			builder, err := generator.Random()
 			if err != nil {
 				return err
 			}
 
-			err = gg.SavePNG(name, img)
+			err = gg.SavePNG(name, builder.Build())
 
 			if err != nil {
 				return ErrFailToGenerateImage.WithErr(err)
