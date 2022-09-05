@@ -4,6 +4,7 @@ package sources
 import (
 	"crypto/rand"
 	"image"
+	"image/color"
 	"math/big"
 	"os"
 	"path/filepath"
@@ -11,17 +12,20 @@ import (
 
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/disintegration/imaging"
+	"github.com/muesli/gamut"
 	"github.com/pterm/pterm"
 	"golang.org/x/image/font"
 	"gopkg.in/fogleman/gg.v1"
 )
 
-var cache map[string][]string = map[string][]string{}
+var cache = map[string][]string{}
 
 type Sources struct {
 	Footer string `fig:"footer" yaml:"footer" default:"sources/footer.png"`
 	Fonts  string `fig:"fonts" yaml:"fonts" default:"sources/fonts"`
 	Covers string `fig:"covers" yaml:"covers" default:"sources/covers"`
+	// https://colors.muz.li/palette/976f4e/4e7197/374f6a/978a4e/6a6137
+	Colors []string `fig:"colors" yaml:"colors" default:"[#000000,#976f4e,#4e7197,#374f6a,#978a4e,#6a6137]"`
 }
 
 func (s Sources) ListFonts() ([]string, error) {
@@ -46,6 +50,25 @@ func (s Sources) RandomFont() (string, error) {
 
 func (s Sources) RandomCover() (string, error) {
 	return randomFile(s.Covers)
+}
+
+func (s Sources) RandomColor() (color.Color, error) {
+	if len(s.Colors) == 0 {
+		return color.Black, nil
+	}
+
+	nBig, err := rand.Int(rand.Reader, big.NewInt(int64(len(s.Colors))))
+	if err != nil {
+		return nil, err
+	}
+
+	hex := s.Colors[nBig.Int64()]
+
+	color := gamut.Hex(hex)
+
+	pterm.Debug.Printfln("Color: %s", hex)
+
+	return color, nil
 }
 
 func (s Sources) OpenRandomFont(points float64) (font.Face, error) {

@@ -39,7 +39,7 @@ var Cmd = &cli.Command{
 
 		cfg := config.Ctx(ctx.Context)
 
-		_, err = collection.Run(ctx.Context, cfg)
+		_, err = collection.Run(ctx.Context, *cfg)
 
 		return err
 	},

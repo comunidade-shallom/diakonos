@@ -21,14 +21,14 @@ type AppConfig struct {
 	Sources       sources.Sources
 }
 
-func Ctx(ctx context.Context) AppConfig {
-	cf, _ := ctx.Value(ctxKey{}).(AppConfig)
+func Ctx(ctx context.Context) *AppConfig {
+	cf, _ := ctx.Value(ctxKey{}).(*AppConfig)
 
 	return cf
 }
 
-func (c AppConfig) WithContext(ctx context.Context) context.Context {
-	if cf, ok := ctx.Value(ctxKey{}).(AppConfig); ok {
+func (c *AppConfig) WithContext(ctx context.Context) context.Context {
+	if cf, ok := ctx.Value(ctxKey{}).(*AppConfig); ok {
 		if cf == c {
 			return ctx
 		}

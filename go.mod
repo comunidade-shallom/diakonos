@@ -11,10 +11,11 @@ require (
 	github.com/kkdai/youtube/v2 v2.7.15
 	github.com/kkyr/fig v0.3.0
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/muesli/gamut v0.3.1
 	github.com/pterm/pterm v0.12.45
 	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/urfave/cli/v2 v2.11.2
-	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8
+	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5
 	golang.org/x/net v0.0.0-20220812174116-3211cb980234
 	gopkg.in/fogleman/gg.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -37,8 +38,11 @@ require (
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/lithammer/fuzzysearch v1.1.5 // indirect
+	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/muesli/clusters v0.0.0-20200529215643-2700303c1762 // indirect
+	github.com/muesli/kmeans v0.3.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/rivo/uniseg v0.3.4 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

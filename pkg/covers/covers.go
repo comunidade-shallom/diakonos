@@ -7,6 +7,7 @@ import (
 
 	"github.com/comunidade-shallom/diakonos/pkg/sources"
 	"github.com/disintegration/imaging"
+	"github.com/muesli/gamut"
 	"gopkg.in/fogleman/gg.v1"
 )
 
@@ -25,14 +26,17 @@ func (g Generator) Generate() (image.Image, error) {
 		return nil, err
 	}
 
-	g.addBox(dc)
-
-	err := g.addFooter(dc)
+	boxColor, err := g.addBox(dc)
 	if err != nil {
 		return nil, err
 	}
 
-	err = g.addMainText(dc)
+	err = g.addFooter(dc, boxColor)
+	if err != nil {
+		return nil, err
+	}
+
+	err = g.addMainText(dc, boxColor)
 	if err != nil {
 		return nil, err
 	}
@@ -40,12 +44,12 @@ func (g Generator) Generate() (image.Image, error) {
 	return dc.Image(), nil
 }
 
-func (g Generator) getTextColor() color.Color {
-	return color.White
+func (g Generator) getTextColor(boxColor color.Color) color.Color {
+	return gamut.Contrast(boxColor)
 }
 
-func (g Generator) getTextShaddowColor() color.Color {
-	return color.Black
+func (g Generator) getTextShaddowColor(boxColor color.Color) color.Color {
+	return gamut.Complementary(boxColor)
 }
 
 func (g Generator) addBackgroundImage(dc *gg.Context) error {
@@ -67,19 +71,41 @@ func (g Generator) addBackgroundImage(dc *gg.Context) error {
 	return nil
 }
 
-func (g Generator) addBox(dc *gg.Context) {
+func (g Generator) addBox(dc *gg.Context) (color.Color, error) {
+	bgColor, err := g.Sources.RandomColor()
+	if err != nil {
+		return bgColor, err
+	}
+
+	bgColor = color.RGBAModel.Convert(bgColor)
+
+	R, G, B, _ := bgColor.RGBA()
+
+	boxColor := color.RGBA{
+		R: uint8(R >> 8),
+		G: uint8(G >> 8),
+		B: uint8(B >> 8),
+		A: 204,
+	}
+
 	x := boxMargin
 	y := boxMargin
 	//nolint:gomnd
-	w := float64(dc.Width()) - (2.0 * boxMargin)
+	w := dc.Width() - (2.0 * boxMargin)
 	//nolint:gomnd
-	h := float64(dc.Height()) - (2.0 * boxMargin)
-	dc.SetColor(color.RGBA{0, 0, 0, 204})
-	dc.DrawRectangle(x, y, w, h)
-	dc.Fill()
+	h := dc.Height() - (2.0 * boxMargin)
+
+	box := gg.NewContext(w, h)
+	box.SetColor(boxColor)
+	box.DrawRectangle(0, 0, float64(w), float64(h))
+	box.Fill()
+
+	dc.DrawImage(box.Image(), int(x), int(y))
+
+	return boxColor, nil
 }
 
-func (g Generator) addFooterTXT(dc *gg.Context) error {
+func (g Generator) addFooterTXT(dc *gg.Context, boxColor color.Color) error {
 	//nolint:gomnd
 	fontFace, err := g.Sources.OpenRandomFont(40)
 	if err != nil {
@@ -87,7 +113,7 @@ func (g Generator) addFooterTXT(dc *gg.Context) error {
 	}
 
 	dc.SetFontFace(fontFace)
-	dc.SetColor(g.getTextColor())
+	dc.SetColor(g.getTextColor(boxColor))
 
 	marginX := 50.0
 	//nolint:gomnd
@@ -102,14 +128,14 @@ func (g Generator) addFooterTXT(dc *gg.Context) error {
 	return nil
 }
 
-func (g Generator) addFooter(dc *gg.Context) error {
+func (g Generator) addFooter(dc *gg.Context, boxColor color.Color) error {
 	footer, err := g.Sources.GetFooter()
 	if err != nil {
 		return err
 	}
 
 	if footer == nil {
-		return g.addFooterTXT(dc)
+		return g.addFooterTXT(dc, boxColor)
 	}
 
 	width := dc.Width() / 2
@@ -126,7 +152,7 @@ func (g Generator) addFooter(dc *gg.Context) error {
 	return nil
 }
 
-func (g Generator) addMainText(dc *gg.Context) error {
+func (g Generator) addMainText(dc *gg.Context, boxColor color.Color) error {
 	fontFace, err := g.Sources.OpenRandomFont(130)
 	if err != nil {
 		return err
@@ -148,10 +174,10 @@ func (g Generator) addMainText(dc *gg.Context) error {
 	x := textRightMargin
 	y := textTopMargin
 
-	dc.SetColor(g.getTextShaddowColor())
+	dc.SetColor(g.getTextShaddowColor(boxColor))
 	//nolint:gomnd
 	dc.DrawStringWrapped(text, x+2, y+3, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
-	dc.SetColor(g.getTextColor())
+	dc.SetColor(g.getTextColor(boxColor))
 	dc.DrawStringWrapped(text, x, y, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
 
 	return nil
