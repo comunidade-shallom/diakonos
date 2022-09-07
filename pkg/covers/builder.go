@@ -14,8 +14,9 @@ import (
 )
 
 const (
-	boxMargin   = 15.0
-	minFontSize = 25.0
+	boxMargin       = 15.0
+	minFontSize     = 25.0
+	fontLineSpacing = 1.5
 )
 
 type Builder struct {
@@ -110,9 +111,8 @@ func (g Builder) addFooter(dc *gg.Context) {
 	dc.DrawImage(footer, marginLefth, marginTop)
 }
 
+//nolint:funlen
 func (g Builder) addMainText(dc *gg.Context) {
-	const lineSpacing = 1.5
-
 	text := g.Text
 	W := dc.Width()
 	H := dc.Height()
@@ -158,7 +158,7 @@ func (g Builder) addMainText(dc *gg.Context) {
 			}
 		}
 
-		_, stringHeight := dc.MeasureMultilineString(mls, lineSpacing)
+		_, stringHeight := dc.MeasureMultilineString(mls, fontLineSpacing)
 
 		verticalSpace := maxHeight - stringHeight
 
@@ -177,7 +177,7 @@ func (g Builder) addMainText(dc *gg.Context) {
 
 	dc.SetColor(g.TextShaddowColor())
 	//nolint:gomnd
-	dc.DrawStringWrapped(text, P+1, yPad+1, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
+	dc.DrawStringWrapped(text, P+1, yPad+1, 0, 0, maxWidth, fontLineSpacing, gg.AlignCenter)
 	dc.SetColor(g.TextColor())
-	dc.DrawStringWrapped(text, P, yPad, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
+	dc.DrawStringWrapped(text, P, yPad, 0, 0, maxWidth, fontLineSpacing, gg.AlignCenter)
 }
