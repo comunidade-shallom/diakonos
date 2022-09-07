@@ -6,19 +6,25 @@ import (
 	"image/color"
 
 	"github.com/disintegration/imaging"
+	"github.com/golang/freetype/truetype"
 	"github.com/muesli/gamut"
+	"github.com/pterm/pterm"
 	"golang.org/x/image/font"
 	"gopkg.in/fogleman/gg.v1"
 )
 
-const boxMargin = 20.0
+const (
+	boxMargin   = 15.0
+	minFontSize = 25.0
+)
 
 type Builder struct {
 	Text       string
 	Width      int
 	Height     int
 	Color      color.Color
-	Font       font.Face
+	Font       *truetype.Font
+	FontSize   float64
 	Background image.Image
 	Footer     image.Image
 	Filters    []Filter
@@ -105,25 +111,73 @@ func (g Builder) addFooter(dc *gg.Context) {
 }
 
 func (g Builder) addMainText(dc *gg.Context) {
+	const lineSpacing = 1.5
+
 	text := g.Text
+	W := dc.Width()
+	H := dc.Height()
+	P := boxMargin * 1.2
 
-	dc.SetFontFace(g.Font)
-
-	//nolint:gomnd
-	textRightMargin := boxMargin + 10.0
-	//nolint:gomnd
-	textTopMargin := boxMargin + 90.0
-	lineSpacing := 1.5
+	yPad := P
 
 	//nolint:gomnd
-	maxWidth := float64(dc.Width()) - (textRightMargin * 2)
+	maxWidth := float64(W) - (P * 2)
+	//nolint:gomnd
+	maxHeight := (float64(H) - (P * 2)) * 0.9
 
-	x := textRightMargin
-	y := textTopMargin
+	fontSize := g.FontSize
+
+	var font font.Face
+
+	updateFont := func() {
+		font = truetype.NewFace(g.Font, &truetype.Options{
+			Size: fontSize,
+		})
+
+		dc.SetFontFace(font)
+	}
+
+	updateFont()
+
+	for {
+		if fontSize < minFontSize {
+			break
+		}
+
+		updateFont()
+
+		lines := dc.WordWrap(text, maxWidth)
+		linesCount := len(lines)
+		mls := ""
+
+		for index, line := range lines {
+			mls += line
+			// last line
+			if index != linesCount-1 {
+				mls += "\n"
+			}
+		}
+
+		_, stringHeight := dc.MeasureMultilineString(mls, lineSpacing)
+
+		verticalSpace := maxHeight - stringHeight
+
+		if (verticalSpace / 2) > P {
+			yPad = verticalSpace / 2
+		}
+
+		if stringHeight < (maxHeight - (2 * P)) {
+			break
+		}
+
+		fontSize -= (fontSize * 0.1)
+	}
+
+	pterm.Debug.Printfln("font size: %v", fontSize)
 
 	dc.SetColor(g.TextShaddowColor())
 	//nolint:gomnd
-	dc.DrawStringWrapped(text, x+2, y+3, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
+	dc.DrawStringWrapped(text, P+1, yPad+1, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
 	dc.SetColor(g.TextColor())
-	dc.DrawStringWrapped(text, x, y, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
+	dc.DrawStringWrapped(text, P, yPad, 0, 0, maxWidth, lineSpacing, gg.AlignCenter)
 }

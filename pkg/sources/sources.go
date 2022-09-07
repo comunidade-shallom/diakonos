@@ -1,4 +1,4 @@
-//nolint:ireturn
+
 package sources
 
 import (
@@ -12,10 +12,9 @@ import (
 
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/disintegration/imaging"
+	"github.com/golang/freetype/truetype"
 	"github.com/muesli/gamut"
 	"github.com/pterm/pterm"
-	"golang.org/x/image/font"
-	"gopkg.in/fogleman/gg.v1"
 )
 
 var cache = map[string][]string{}
@@ -73,15 +72,25 @@ func (s Sources) RandomColor() (color.Color, error) {
 	return color, nil
 }
 
-func (s Sources) OpenRandomFont(points float64) (font.Face, error) {
+func (s Sources) OpenRandomFont() (*truetype.Font, error) {
 	src, err := s.RandomFont()
+	if err != nil {
+		return nil, err
+	}
+
+	fontBytes, err := os.ReadFile(src)
+	if err != nil {
+		return nil, err
+	}
+
+	font, err := truetype.Parse(fontBytes)
 	if err != nil {
 		return nil, err
 	}
 
 	pterm.Debug.Printfln("Load font: %s", files.GetRelative(src))
 
-	return gg.LoadFontFace(src, points)
+	return font, nil
 }
 
 func (s Sources) OpenRandomCover() (image.Image, error) {

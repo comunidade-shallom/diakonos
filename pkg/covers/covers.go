@@ -39,7 +39,7 @@ func (g GeneratorSource) Random() (Builder, error) {
 		return Builder{}, err
 	}
 
-	font, err := g.Sources.OpenRandomFont(fontSize)
+	font, err := g.Sources.OpenRandomFont()
 	if err != nil {
 		return Builder{}, err
 	}
@@ -53,6 +53,7 @@ func (g GeneratorSource) Random() (Builder, error) {
 		Text:       g.Text,
 		Color:      clor,
 		Font:       font,
+		FontSize:   fontSize,
 		Height:     height,
 		Width:      width,
 		Background: background,
