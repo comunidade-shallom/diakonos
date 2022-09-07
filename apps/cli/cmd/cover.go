@@ -12,7 +12,6 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/comunidade-shallom/diakonos/pkg/support"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
-	"github.com/gosimple/slug"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/fogleman/gg.v1"
@@ -79,7 +78,7 @@ var CmdCover = &cli.Command{
 		}
 
 		if outDir == "" {
-			outDir = "covers/" + slug.Make(text)
+			outDir = "covers/" + covers.BuildFolderName(text)
 		}
 
 		if !filepath.IsAbs(outDir) {
