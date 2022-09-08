@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/comunidade-shallom/diakonos/pkg/sources"
 	"github.com/comunidade-shallom/diakonos/pkg/support"
 	"github.com/comunidade-shallom/diakonos/pkg/support/errors"
 	"github.com/creasty/defaults"
@@ -144,6 +145,10 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 
 	if cfg.Sources.Footer != "" && !path.IsAbs(cfg.Sources.Footer) {
 		cfg.Sources.Footer = path.Join(pwd, cfg.Sources.Footer)
+	}
+
+	if len(cfg.Sources.Colors) == 0 {
+		cfg.Sources.Colors = sources.DefaultColors()
 	}
 
 	return cfg, nil

@@ -5,9 +5,9 @@ import (
 	"image"
 	"image/color"
 
+	"github.com/comunidade-shallom/diakonos/pkg/sources"
 	"github.com/disintegration/imaging"
 	"github.com/golang/freetype/truetype"
-	"github.com/muesli/gamut"
 	"github.com/pterm/pterm"
 	"golang.org/x/image/font"
 	"gopkg.in/fogleman/gg.v1"
@@ -20,15 +20,15 @@ const (
 )
 
 type Builder struct {
-	Text       string
-	Width      int
-	Height     int
-	Color      color.Color
-	Font       *truetype.Font
-	FontSize   float64
-	Background image.Image
-	Footer     image.Image
-	Filters    []Filter
+	Text        string
+	Width       int
+	Height      int
+	ColorPallet sources.ColorPallet
+	Font        *truetype.Font
+	FontSize    float64
+	Background  image.Image
+	Footer      image.Image
+	Filters     []Filter
 }
 
 func (g Builder) WithSize(size Size) Builder {
@@ -49,14 +49,6 @@ func (g Builder) Build() image.Image {
 	return dc.Image()
 }
 
-func (g Builder) TextColor() color.Color {
-	return gamut.Contrast(g.Color)
-}
-
-func (g Builder) TextShaddowColor() color.Color {
-	return gamut.Complementary(g.Color)
-}
-
 func (g Builder) addBackground(dc *gg.Context) {
 	if g.Background == nil {
 		return
@@ -74,7 +66,7 @@ func (g Builder) addBackground(dc *gg.Context) {
 }
 
 func (g Builder) addBox(dc *gg.Context) {
-	R, G, B, _ := color.RGBAModel.Convert(g.Color).RGBA()
+	R, G, B, _ := color.RGBAModel.Convert(g.ColorPallet.Base).RGBA()
 
 	boxColor := color.RGBA{
 		R: uint8(R >> 8),
@@ -175,9 +167,9 @@ func (g Builder) addMainText(dc *gg.Context) {
 
 	pterm.Debug.Printfln("font size: %v", fontSize)
 
-	dc.SetColor(g.TextShaddowColor())
+	dc.SetColor(g.ColorPallet.Shadow)
 	//nolint:gomnd
 	dc.DrawStringWrapped(text, P+1, yPad+1, 0, 0, maxWidth, fontLineSpacing, gg.AlignCenter)
-	dc.SetColor(g.TextColor())
+	dc.SetColor(g.ColorPallet.Text)
 	dc.DrawStringWrapped(text, P, yPad, 0, 0, maxWidth, fontLineSpacing, gg.AlignCenter)
 }

@@ -3,7 +3,6 @@ package sources
 import (
 	"crypto/rand"
 	"image"
-	"image/color"
 	"math/big"
 	"os"
 	"path/filepath"
@@ -12,7 +11,6 @@ import (
 	"github.com/comunidade-shallom/diakonos/pkg/files"
 	"github.com/disintegration/imaging"
 	"github.com/golang/freetype/truetype"
-	"github.com/muesli/gamut"
 	"github.com/pterm/pterm"
 )
 
@@ -22,10 +20,7 @@ type Sources struct {
 	Footer string `fig:"footer" yaml:"footer" default:"sources/footer.png"`
 	Fonts  string `fig:"fonts" yaml:"fonts" default:"sources/fonts"`
 	Covers string `fig:"covers" yaml:"covers" default:"sources/covers"`
-	// https://colors.muz.li/palette/976f4e/4e7197/374f6a/978a4e/6a6137
-	// https://colors.muz.li/palette/24180f/0f1c24/0a1419/24200f/19160a
-	//nolint:lll
-	Colors []string `fig:"colors" yaml:"colors" default:"[#000000,#976f4e,#4e7197,#374f6a,#978a4e,#6a6137,#24180f,#0f1c24,#0a1419,#24200f,#19160a]"`
+	Colors Colors `fig:"colors" yaml:"colors"`
 }
 
 func (s Sources) ListFonts() ([]string, error) {
@@ -52,23 +47,8 @@ func (s Sources) RandomCover() (string, error) {
 	return randomFile(s.Covers)
 }
 
-func (s Sources) RandomColor() (color.Color, error) {
-	if len(s.Colors) == 0 {
-		return color.Black, nil
-	}
-
-	nBig, err := rand.Int(rand.Reader, big.NewInt(int64(len(s.Colors))))
-	if err != nil {
-		return nil, err
-	}
-
-	hex := s.Colors[nBig.Int64()]
-
-	color := gamut.Hex(hex)
-
-	pterm.Debug.Printfln("Color: %s", hex)
-
-	return color, nil
+func (s Sources) RandomColorPallet() ColorPallet {
+	return s.Colors.RandomPallet()
 }
 
 func (s Sources) OpenRandomFont() (*truetype.Font, error) {

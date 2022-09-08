@@ -44,20 +44,15 @@ func (g GeneratorSource) Random() (Builder, error) {
 		return Builder{}, err
 	}
 
-	clor, err := g.Sources.RandomColor()
-	if err != nil {
-		return Builder{}, err
-	}
-
 	return Builder{
-		Text:       g.Text,
-		Color:      clor,
-		Font:       font,
-		FontSize:   fontSize,
-		Height:     height,
-		Width:      width,
-		Background: background,
-		Footer:     footer,
-		Filters:    RandomFilters(),
+		Text:        g.Text,
+		ColorPallet: g.Sources.RandomColorPallet(),
+		Font:        font,
+		FontSize:    fontSize,
+		Height:      height,
+		Width:       width,
+		Background:  background,
+		Footer:      footer,
+		Filters:     RandomFilters(),
 	}, nil
 }
