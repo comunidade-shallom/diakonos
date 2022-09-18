@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/comunidade-shallom/diakonos/pkg/audios"
+	"github.com/comunidade-shallom/diakonos/pkg/convert"
 	"github.com/comunidade-shallom/diakonos/pkg/cut"
 	"github.com/comunidade-shallom/diakonos/pkg/download"
 	"github.com/comunidade-shallom/diakonos/pkg/merge"
@@ -16,6 +17,7 @@ type AppConfig struct {
 	BaseOutputDir string `fig:"base_output_dir" yaml:"base_output_dir" default:"outputs"`
 	Download      download.Config
 	Cut           cut.Config
+	Convert       convert.Config
 	Audio         audios.Config
 	Merge         merge.Config
 	Sources       sources.Sources

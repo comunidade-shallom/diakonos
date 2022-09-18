@@ -108,6 +108,15 @@ func applyDefaults(cfg AppConfig) (AppConfig, error) {
 		cfg.Cut.OutputDir = path.Join(base, cfg.Cut.OutputDir)
 	}
 
+	// convert
+	if cfg.Convert.OutputDir == "" {
+		cfg.Convert.OutputDir = path.Join(base, "conversions")
+	}
+
+	if !path.IsAbs(cfg.Convert.OutputDir) {
+		cfg.Convert.OutputDir = path.Join(base, cfg.Convert.OutputDir)
+	}
+
 	// audios
 	if cfg.Audio.OutputDir == "" {
 		cfg.Audio.OutputDir = path.Join(base, "audios")
