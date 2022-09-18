@@ -23,12 +23,19 @@ bin/*
 !bin/.gitkeep
 
 # outputs folder
-outputs/**
-!outputs/*/.gitkeep
+!outputs/.gitkeep
+!outputs/audios/.gitkeep
+!outputs/conversion/.gitkeep
+!outputs/covers/.gitkeep
+!outputs/cuts/.gitkeep
+!outputs/downloads/.gitkeep
+!outputs/merges/.gitkeep
+outputs/*
 
 # sources folder
-sources/**
-!sources/*/.gitkeep
+!sources/covers/.gitkeep
+!sources/fonts/.gitkeep
+sources/*
 
 .env
 *.db
