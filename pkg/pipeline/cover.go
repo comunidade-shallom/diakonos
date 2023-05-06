@@ -38,7 +38,6 @@ func (p Pipeline) runCoverGenerate(
 	}
 
 	if prefix == "" {
-		//nolint:gomnd
 		prefix = strconv.FormatInt(time.Now().Unix(), 16)
 	}
 

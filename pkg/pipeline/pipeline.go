@@ -17,10 +17,11 @@ import (
 type (
 	Action   string
 	Pipeline struct {
-		Name      string                       `yml:"name"`
-		Data      collection.Params            `yml:"data"`
-		Values    map[string]collection.Params `yml:"values"`
-		Actions   []ActionDefinition           `yml:"actions"`
+		Name    string                       `yaml:"name"`
+		Data    collection.Params            `yaml:"data"`
+		Values  map[string]collection.Params `yaml:"values"`
+		Actions []ActionDefinition           `yaml:"actions"`
+
 		outputs   map[string]files.Output
 		cfg       config.AppConfig
 		targetDir string

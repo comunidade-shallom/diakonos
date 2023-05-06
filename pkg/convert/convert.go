@@ -24,7 +24,6 @@ func ToMP4(_ context.Context, params Params) (files.Output, error) {
 	// ffmpeg -y -i $path -acodec libmp3lame -ar 44100 -ac 1 -vcodec libx264 $dirname/$basename.mp4
 
 	err := ffmpeg.Input(params.Source).
-		//nolint: contextcheck
 		Output(out.Filename, ffmpeg.KwArgs{
 			"movflags":  "faststart",
 			"acodec":    "libmp3lame",

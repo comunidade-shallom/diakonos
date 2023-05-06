@@ -24,7 +24,6 @@ func Extract(_ context.Context, params Params) (files.Output, error) {
 
 	err := ffmpeg.Input(params.Source).
 		Audio().
-		//nolint:contextcheck
 		Output(out.Filename, ffmpeg.KwArgs{"f": "mp3", "b:a": bitrate, "vn": ""}).
 		Run()
 

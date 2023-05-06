@@ -14,13 +14,13 @@ import (
 type ctxKey struct{}
 
 type AppConfig struct {
-	BaseOutputDir string `fig:"base_output_dir" yaml:"base_output_dir" default:"outputs"`
-	Download      download.Config
-	Cut           cut.Config
-	Convert       convert.Config
-	Audio         audios.Config
-	Merge         merge.Config
-	Sources       sources.Sources
+	BaseOutputDir string          `fig:"base_output_dir" yaml:"base_output_dir" default:"outputs"`
+	Download      download.Config `fig:"download" yaml:"download"`
+	Cut           cut.Config      `fig:"cut" yaml:"cut"`
+	Convert       convert.Config  `fig:"convert" yaml:"convert"`
+	Audio         audios.Config   `fig:"audio" yaml:"audio"`
+	Merge         merge.Config    `fig:"merge" yaml:"merge"`
+	Sources       sources.Sources `fig:"sources" yaml:"sources"`
 }
 
 func Ctx(ctx context.Context) *AppConfig {
